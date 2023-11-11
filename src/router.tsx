@@ -25,7 +25,7 @@ const Crypto = Loader(lazy(() => import('src/content/dashboards/Crypto')));
 // Applications
 
 const Messenger = Loader(
-  lazy(() => import('src/content/applications/Messenger'))
+  lazy(() => import('src/content/applications/Messanger'))
 );
 const Transactions = Loader(
   lazy(() => import('src/content/applications/Transactions'))
@@ -35,6 +35,10 @@ const UserProfile = Loader(
 );
 const UserSettings = Loader(
   lazy(() => import('src/content/applications/Users/settings'))
+);
+
+const CekTerimaBarang = Loader(
+  lazy(() => import('src/content/applications/CekTerimaBarang'))
 );
 
 // Components
@@ -135,6 +139,19 @@ const routes: RouteObject[] = [
       {
         path: 'messenger',
         element: <Messenger />
+      },
+      {
+        path: 'permintaanbarang'
+      },
+      {
+        path: 'daftarpermintaan'
+      },
+      {
+        path: 'formpermintaan'
+      },
+      {
+        path: 'cekterimabarang',
+        element: <CekTerimaBarang />
       }
     ]
   },

@@ -57,7 +57,7 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
 
 function AccountBalance() {
   const theme = useTheme();
-
+  
   const chartOptions: ApexOptions = {
     chart: {
       background: 'transparent',
