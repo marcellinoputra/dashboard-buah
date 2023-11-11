@@ -39,14 +39,14 @@ const rows = [
   )
 ];
 
-export default function CekTerimaBarang() {
+export default function FormPermintaan() {
   return (
     <>
       <Typography
         variant="h1"
         sx={{ marginTop: 5, paddingLeft: 5, paddingBottom: 5 }}
       >
-        Cek Terima Barang
+        Form Permintaan
       </Typography>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

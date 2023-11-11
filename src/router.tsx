@@ -41,6 +41,26 @@ const CekTerimaBarang = Loader(
   lazy(() => import('src/content/applications/CekTerimaBarang'))
 );
 
+const DaftarPermintaanBarang = Loader(
+  lazy(() => import('src/content/applications/DaftarPermintaan'))
+);
+
+const FormPermintaanBarang = Loader(
+  lazy(() => import('src/content/applications/FormPermintaan'))
+);
+
+const PermintaanBarang = Loader(
+  lazy(() => import('src/content/applications/PermintaanBarang'))
+);
+
+//Auth
+const SignIn = Loader(lazy(() => import('src/content/applications/Loginpage')));
+
+//Homepage
+const Homepage = Loader(
+  lazy(() => import('src/content/applications/Homepage'))
+);
+
 // Components
 
 const Buttons = Loader(
@@ -82,16 +102,12 @@ const StatusMaintenance = Loader(
 
 const routes: RouteObject[] = [
   {
-    path: '',
-    element: <BaseLayout />,
+    path: '/',
+    element: <SignIn />,
     children: [
       {
         path: '/',
-        element: <Overview />
-      },
-      {
-        path: 'overview',
-        element: <Navigate to="/" replace />
+        element: <Navigate to="/dashboards/homepage" replace />
       },
       {
         path: 'status',
@@ -133,6 +149,10 @@ const routes: RouteObject[] = [
         element: <Navigate to="crypto" replace />
       },
       {
+        path: 'homepage',
+        element: <Homepage />
+      },
+      {
         path: 'crypto',
         element: <Crypto />
       },
@@ -141,13 +161,16 @@ const routes: RouteObject[] = [
         element: <Messenger />
       },
       {
-        path: 'permintaanbarang'
+        path: 'permintaanbarang',
+        element: <PermintaanBarang />
       },
       {
-        path: 'daftarpermintaan'
+        path: 'daftarpermintaan',
+        element: <DaftarPermintaanBarang />
       },
       {
-        path: 'formpermintaan'
+        path: 'formpermintaan',
+        element: <FormPermintaanBarang />
       },
       {
         path: 'cekterimabarang',
