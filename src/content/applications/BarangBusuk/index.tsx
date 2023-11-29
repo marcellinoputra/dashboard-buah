@@ -1,4 +1,5 @@
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -8,6 +9,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
+import { CSVLink } from 'react-csv';
 
 function createData(
   id: string,
@@ -39,15 +41,23 @@ const rows = [
   )
 ];
 
-export default function FormPermintaan() {
+export default function BarangBusuk() {
   return (
     <>
       <Typography
         variant="h1"
         sx={{ marginTop: 5, paddingLeft: 5, paddingBottom: 5 }}
       >
-        Form Permintaan
+        Barang Busuk
       </Typography>
+      <Button
+        variant="contained"
+        sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
+      >
+        <CSVLink data={rows} style={{ color: 'white', textDecoration: 'none' }}>
+          Download CSV
+        </CSVLink>
+      </Button>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

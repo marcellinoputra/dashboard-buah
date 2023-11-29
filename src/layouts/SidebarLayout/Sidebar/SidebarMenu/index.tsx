@@ -212,67 +212,10 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/dashboards/permintaanbarang"
-                  // startIcon={<BrightnessLowTwoToneIcon />}
-                >
-                  Permintaan Barang
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/daftarpermintaan"
-                  // startIcon={<MmsTwoToneIcon />}
-                >
-                  Daftar Permintaan
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/formpermintaan"
-                  // startIcon={<MmsTwoToneIcon />}
-                >
-                  Form Permintaan
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/cekterimabarang"
-                  // startIcon={<MmsTwoToneIcon />}
-                >
-                  Cek Terima Barang
-                </Button>
-              </ListItem>
-            </List>
-          </SubMenuWrapper>
-        </List>
-        <List
-          component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
-              Persediaan
-            </ListSubheader>
-          }
-        >
-          <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/management/transactions"
+                  to="/dashboards/bahanbakucabang"
                   // startIcon={<TableChartTwoToneIcon />}
                 >
-                  Stock Opname
+                  Bahan Baku Cabang
                 </Button>
               </ListItem>
               <ListItem component="div">
@@ -280,7 +223,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/management/transactions"
+                  to="/dashboards/barangbusuk"
                   // startIcon={<TableChartTwoToneIcon />}
                 >
                   Barang Busuk
@@ -291,10 +234,10 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/management/transactions"
+                  to="/dashboards/belicabang"
                   // startIcon={<TableChartTwoToneIcon />}
                 >
-                  Mutasi
+                  Beli Cabang
                 </Button>
               </ListItem>
               <ListItem component="div">
@@ -302,10 +245,65 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/management/transactions"
+                  to="/dashboards/makanancabang"
                   // startIcon={<TableChartTwoToneIcon />}
                 >
-                  Beli Barang
+                  Makanan Cabang
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/dashboards/mutasicabang"
+                  // startIcon={<TableChartTwoToneIcon />}
+                >
+                  Mutasi Cabang
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/dashboards/stockopnamecabang"
+                  // startIcon={<TableChartTwoToneIcon />}
+                >
+                  Stock Opname Cabang
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/dashboards/bahanbakugudang"
+                  // startIcon={<TableChartTwoToneIcon />}
+                >
+                  Bahan Baku Gudang
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/dashboards/datakirimgudang"
+                  // startIcon={<TableChartTwoToneIcon />}
+                >
+                  Data Kirim Gudang
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/dashboards/kodesuppliercabang"
+                  // startIcon={<TableChartTwoToneIcon />}
+                >
+                  Kode Supplier Cabang
                 </Button>
               </ListItem>
             </List>

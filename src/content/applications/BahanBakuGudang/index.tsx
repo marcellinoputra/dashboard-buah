@@ -41,14 +41,14 @@ const rows = [
   )
 ];
 
-export default function CekTerimaBarang() {
+export default function BahanBakuGudang() {
   return (
     <>
       <Typography
         variant="h1"
         sx={{ marginTop: 5, paddingLeft: 5, paddingBottom: 5 }}
       >
-        Cek Terima Barang
+        Bahan Baku Gudang
       </Typography>
       <Button
         variant="contained"
