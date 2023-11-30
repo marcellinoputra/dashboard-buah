@@ -9,39 +9,87 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 
-function createData(
-  id: string,
-  tanggal_permintaan: string,
-  tanggal_terima: string,
-  keterangan: string,
-  aksi: string,
-  status: string
-) {
-  return { id, tanggal_permintaan, tanggal_terima, keterangan, aksi, status };
+interface DataMakananCabang {
+  id: number;
+  kode_bb: string;
+  nama_bb: string;
+  satuan: string;
+  saldo_awal: string;
+  tp_bb: string;
+  total_terima: number;
+  beli: number;
+  busuk: number;
+  mutasi_plus: number;
+  mutasi_minus: number;
+  pakai: number;
+  stock_opname: number;
+  selisih: number;
+  input_stock: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const rows = [
-  createData(
-    'TR201123001',
-    '20/11/2023',
-    '21/11/2023',
-    'Regular',
-    'Cek',
-    'Selesai'
-  ),
-  createData(
-    'TR201123001',
-    '22/11/2023',
-    '23/11/2023',
-    'Regular',
-    'Cek',
-    'Proses'
-  )
-];
-
 export default function MakananCabang() {
+  const [dataMakananCabang, setDataMakananCabang] = useState<
+    DataMakananCabang[]
+  >([]);
+  const [newData, setNewData] = useState({
+    kode_bb: '',
+    nama_bb: '',
+    satuan: '',
+    saldo_awal: 0,
+    tp_bb: '',
+    total_terima: 0,
+    beli: 0,
+    busuk: 0,
+    mutasi_plus: 0,
+    pakai: 0,
+    stock_opname: 0,
+    selisih: 0,
+    input_stock: '',
+    createdAt: new Date()
+  });
+  const [editData, setEditData] = useState({
+    id: 0,
+    kode_bb: '',
+    nama_bb: '',
+    satuan: '',
+    saldo_awal: 0,
+    tp_bb: '',
+    total_terima: 0,
+    beli: 0,
+    busuk: 0,
+    mutasi_plus: 0,
+    pakai: 0,
+    stock_opname: 0,
+    selisih: 0,
+    input_stock: '',
+    updatedAt: new Date()
+  });
+
+  async function getData() {
+    await axios
+      .get(`${import.meta.env.VITE_API_URL}/v1/cabang/makanan`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        return setDataMakananCabang(res.data.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
       <Typography
@@ -54,7 +102,10 @@ export default function MakananCabang() {
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
       >
-        <CSVLink data={rows} style={{ color: 'white', textDecoration: 'none' }}>
+        <CSVLink
+          data={dataMakananCabang}
+          style={{ color: 'white', textDecoration: 'none' }}
+        >
           Download CSV
         </CSVLink>
       </Button>
@@ -62,28 +113,50 @@ export default function MakananCabang() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID Order</TableCell>
-              <TableCell align="left">Tanggal Permintaan</TableCell>
-              <TableCell align="left">Tanggal Terima</TableCell>
-              <TableCell align="left">Keterangan</TableCell>
-              <TableCell align="left">Aksi</TableCell>
-              <TableCell align="left">Status</TableCell>
+              <TableCell>ID</TableCell>
+              <TableCell align="left">Kode BB</TableCell>
+              <TableCell align="left">Nama BB</TableCell>
+              <TableCell align="left">Satuan</TableCell>
+              <TableCell align="left">Saldo Awal</TableCell>
+              <TableCell align="left">Tp BB</TableCell>
+              <TableCell align="left">Total Terima</TableCell>
+              <TableCell align="left">Beli</TableCell>
+              <TableCell align="left">Busuk</TableCell>
+              <TableCell align="left">Mutasi Plus</TableCell>
+              <TableCell align="left">Mutasi Minus</TableCell>
+              <TableCell align="left">Pakai</TableCell>
+              <TableCell align="left">Stock Opname</TableCell>
+              <TableCell align="left">Selisih</TableCell>
+              <TableCell align="left">Input Stock</TableCell>
+              <TableCell align="left">Created At</TableCell>
+              <TableCell align="left">Updated At</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {dataMakananCabang.map((data) => (
               <TableRow
-                key={row.id}
+                key={data.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.id}
+                  {data.id}
                 </TableCell>
-                <TableCell align="left">{row.tanggal_permintaan}</TableCell>
-                <TableCell align="left">{row.tanggal_terima}</TableCell>
-                <TableCell align="left">{row.keterangan}</TableCell>
-                <TableCell align="left">{row.aksi}</TableCell>
-                <TableCell align="left">{row.status}</TableCell>
+                <TableCell align="left">{data.kode_bb}</TableCell>
+                <TableCell align="left">{data.nama_bb}</TableCell>
+                <TableCell align="left">{data.satuan}</TableCell>
+                <TableCell align="left">{data.saldo_awal}</TableCell>
+                <TableCell align="left">{data.tp_bb}</TableCell>
+                <TableCell align="left">{data.total_terima}</TableCell>
+                <TableCell align="left">{data.beli}</TableCell>
+                <TableCell align="left">{data.busuk}</TableCell>
+                <TableCell align="left">{data.mutasi_plus}</TableCell>
+                <TableCell align="left">{data.mutasi_minus}</TableCell>
+                <TableCell align="left">{data.pakai}</TableCell>
+                <TableCell align="left">{data.stock_opname}</TableCell>
+                <TableCell align="left">{data.selisih}</TableCell>
+                <TableCell align="left">{data.input_stock}</TableCell>
+                <TableCell align="left">{data.createdAt}</TableCell>
+                <TableCell align="left">{data.updatedAt}</TableCell>
               </TableRow>
             ))}
           </TableBody>

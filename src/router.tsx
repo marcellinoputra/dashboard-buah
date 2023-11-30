@@ -49,7 +49,7 @@ const BeliCabang = Loader(
 );
 
 const KodeSupplierCabang = Loader(
-  lazy(() => import('src/content/applications/KodeSupplierCabang'))
+  lazy(() => import('src/content/applications/KodeSupplierGudang'))
 );
 
 const MakananCabang = Loader(

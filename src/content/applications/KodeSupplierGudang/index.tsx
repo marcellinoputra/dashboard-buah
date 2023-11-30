@@ -10,46 +10,61 @@ import {
   Typography
 } from '@mui/material';
 import axios from 'axios';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 
-interface DataMutasiCabang {
+interface DataKodeSupplierCabang {
   id: number;
-  kode_bb: string;
-  nama_bb: string;
-  satuan: string;
-  tanggal_mutasi: string;
-  mutasi_terima: number;
-  mutasi_kirim: number;
-  keterangan: string;
+  kode: string;
+  nama: string;
+  kelompok: number;
+  alamat: string;
+  notelp: number;
+  sp_kota: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export default function MutasiCabang() {
-  const [dataMutasiCabang, setDataMutasiCabang] = useState<DataMutasiCabang[]>(
-    []
-  );
+const boxStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  overflowY: 'scroll',
+  height: 500,
+  p: 4
+};
+
+const textFieldStyle = {
+  marginBottom: 10,
+  marginTop: 10
+};
+
+export default function KodeSupplierCabang() {
+  const [dataKodeSupllier, setDataKodeSupplier] = useState<
+    DataKodeSupplierCabang[]
+  >([]);
   const [newData, setNewData] = useState({
-    kode_bb: '',
-    nama_bb: '',
-    satuan: '',
-    tanggal_mutasi: '',
-    mutasi_terima: 0,
-    mutasi_kirim: 0,
-    keterangan: '',
+    kode: '',
+    nama: '',
+    kelompok: 0,
+    alamat: '',
+    notelp: 0,
+    sp_kota: '',
     createdAt: new Date()
   });
   const [editData, setEditData] = useState({
     id: 0,
-    kode_bb: '',
-    nama_bb: '',
-    satuan: '',
-    tanggal_mutasi: '',
-    mutasi_terima: 0,
-    mutasi_kirim: 0,
-    keterangan: '',
+    kode: '',
+    nama: '',
+    kelompok: 0,
+    alamat: '',
+    notelp: 0,
+    sp_kota: '',
     updatedAt: new Date()
   });
 
@@ -76,13 +91,13 @@ export default function MutasiCabang() {
 
   async function getData() {
     await axios
-      .get(`${import.meta.env.VITE_API_URL}/v1/cabang/mutasi-caban`, {
+      .get(`${import.meta.env.VITE_API_URL}/v1/gudang/kode-supplier`, {
         headers: {
           'ngrok-skip-browser-warning': 'any'
         }
       })
       .then((res) => {
-        return setDataMutasiCabang(res.data.data);
+        return setDataKodeSupplier(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -99,14 +114,14 @@ export default function MutasiCabang() {
         variant="h1"
         sx={{ marginTop: 5, paddingLeft: 5, paddingBottom: 5 }}
       >
-        Mutasi Cabang
+        Kode Supplier Cabang
       </Typography>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
       >
         <CSVLink
-          data={dataMutasiCabang}
+          data={dataKodeSupllier}
           style={{ color: 'white', textDecoration: 'none' }}
         >
           Download CSV
@@ -117,19 +132,18 @@ export default function MutasiCabang() {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell align="left">Kode BB</TableCell>
-              <TableCell align="left">Nama BB</TableCell>
-              <TableCell align="left">Satuan</TableCell>
-              <TableCell align="left">Tanggal Mutasi</TableCell>
-              <TableCell align="left">Mutasi Terima</TableCell>
-              <TableCell align="left">Mutasi Kirim</TableCell>
-              <TableCell align="left">Keterangan</TableCell>
+              <TableCell align="left">Kode</TableCell>
+              <TableCell align="left">Nama</TableCell>
+              <TableCell align="left">Kelompok</TableCell>
+              <TableCell align="left">Alamat</TableCell>
+              <TableCell align="left">No Telepon</TableCell>
+              <TableCell align="left">Sp Kota</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Updated At</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {dataMutasiCabang.map((data) => (
+            {dataKodeSupllier.map((data) => (
               <TableRow
                 key={data.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -137,23 +151,14 @@ export default function MutasiCabang() {
                 <TableCell component="th" scope="row">
                   {data.id}
                 </TableCell>
-                <TableCell align="left">{data.kode_bb}</TableCell>
-                <TableCell align="left">{data.nama_bb}</TableCell>
-                <TableCell align="left">{data.satuan}</TableCell>
-                <TableCell align="left">{data.tanggal_mutasi}</TableCell>
-                <TableCell align="left">{data.mutasi_terima}</TableCell>
-                <TableCell align="left">{data.mutasi_kirim}</TableCell>
-                <TableCell align="left">{data.keterangan}</TableCell>
-                <TableCell align="left">
-                  {moment(data.createdAt)
-                    .utc()
-                    .format('MMMM Do YYYY, h:mm:ss a')}
-                </TableCell>
-                <TableCell align="left">
-                  {moment(data.updatedAt)
-                    .utc()
-                    .format('MMMM Do YYYY, h:mm:ss a')}
-                </TableCell>
+                <TableCell align="left">{data.kode}</TableCell>
+                <TableCell align="left">{data.nama}</TableCell>
+                <TableCell align="left">{data.kelompok}</TableCell>
+                <TableCell align="left">{data.alamat}</TableCell>
+                <TableCell align="left">{data.notelp}</TableCell>
+                <TableCell align="left">{data.sp_kota}</TableCell>
+                <TableCell align="left">{data.createdAt}</TableCell>
+                <TableCell align="left">{data.updatedAt}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  username  String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  role      Int      @default(0)
+  createdAt DateTime @default(now()) @db.DateTime(0)
+}
+
+model bahanbaku_cabang {
+  id        Int       @id @default(autoincrement())
+  rm_kode   String    @db.VarChar(255)
+  rm_nama   String    @db.VarChar(255)
+  rm_satuan String    @db.VarChar(255)
+  createdAt DateTime  @db.DateTime(0)
+  updatedAt DateTime? @db.DateTime(0)
+}
+
+model beli_cabang {
+  id         Int       @id @default(autoincrement())
+  kode_bb    String    @db.VarChar(255)
+  nama_bb    String    @db.VarChar(255)
+  satuan     String    @db.VarChar(5)
+  tanggal_bb String    @db.VarChar(255)
+  total_beli Float     @default(0)
+  createdAt  DateTime  @db.DateTime(0)
+  updatedAt  DateTime? @db.DateTime(0)
+}
+
+model busuk_cabang {
+  id         Int       @id @default(autoincrement())
+  kode_bb    String    @db.VarChar(255)
+  nama_bb    String    @db.VarChar(255)
+  satuan     String    @db.VarChar(5)
+  tanggal_bb String    @db.VarChar(255)
+  total      Float     @default(0)
+  createdAt  DateTime  @db.DateTime(0)
+  updatedAt  DateTime? @db.DateTime(0)
+}
+
+model makanan_cabang {
+  id           Int       @id @default(autoincrement())
+  kode_bb      String    @db.VarChar(255)
+  nama_bb      String    @db.VarChar(255)
+  satuan       String    @db.VarChar(5)
+  saldo_awal   Float     @default(0)
+  tp_bb        String    @db.VarChar(255)
+  total_terima Float     @default(0)
+  beli         Float     @default(0)
+  busuk        Float     @default(0)
+  mutasi_plus  Float     @default(0)
+  mutasi_minus Float     @default(0)
+  pakai        Float     @default(0)
+  stock_opname Float     @default(0)
+  selisih      Float     @default(0)
+  input_stock  String    @db.VarChar(255)
+  createdAt    DateTime  @db.DateTime(0)
+  updatedAt    DateTime? @db.DateTime(0)
+}
+
+model mutasi_cabang {
+  id             Int       @id @default(autoincrement())
+  kode_bb        String    @db.VarChar(255)
+  nama_bb        String    @db.VarChar(255)
+  satuan         String    @db.VarChar(5)
+  tanggal_mutasi String    @db.VarChar(255)
+  mutasi_terima  Float?    @default(0)
+  mutasi_kirim   Float     @default(0)
+  keterangan     String?   @db.VarChar(255)
+  createdAt      DateTime  @db.DateTime(0)
+  updatedAt      DateTime? @db.DateTime(0)
+}
+
+model so_cabang {
+  id        Int       @id @default(autoincrement())
+  kode_bb   String    @db.VarChar(255)
+  nama_bb   String    @db.VarChar(255)
+  satuan    String    @db.VarChar(5)
+  tempat_bb String    @db.VarChar(255)
+  total     Float     @default(0)
+  createdAt DateTime  @db.DateTime(0)
+  updatedAt DateTime? @db.DateTime(0)
+}
+
+model bbaku_gudang {
+  id          Int       @id @default(autoincrement())
+  rm_kode     String    @db.VarChar(255)
+  rm_nama     String    @db.VarChar(255)
+  rm_satuan   String    @db.VarChar(255)
+  rm_konversi Int
+  rm_ket      Int
+  cek         String    @db.VarChar(255)
+  help_mutasi String    @db.VarChar(255)
+  gdg         String    @db.VarChar(255)
+  createdAt   DateTime  @db.DateTime(0)
+  updatedAt   DateTime? @db.DateTime(0)
+}
+
+model data_kirim_gudang {
+  id          Int       @id @default(autoincrement())
+  krm_rm      String    @db.VarChar(255)
+  krm_cabang  String    @db.VarChar(225)
+  krm_nama    String    @db.VarChar(225)
+  krm_qty     Int
+  tanggal     String    @db.VarChar(225)
+  nama_barang String    @db.VarChar(225)
+  satuan      String    @db.VarChar(225)
+  createdAt   DateTime  @default(now()) @db.DateTime(0)
+  updatedAt   DateTime? @db.DateTime(0)
+}
+
+model kd_supplier_gudang {
+  id        Int       @id @default(autoincrement())
+  kode      String    @db.VarChar(255)
+  nama      String    @db.VarChar(255)
+  kelompok  Int
+  alamat    Int
+  notelp    Int
+  sp_kota   String    @db.VarChar(255)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @db.DateTime(0)
+}
