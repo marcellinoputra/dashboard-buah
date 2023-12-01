@@ -117,12 +117,22 @@ export default function BahanBakuCabang() {
     formData.append('rm_satuan', newData.rm_satuan);
 
     await axios
-      .post(`${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku`, formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'ngrok-skip-browser-warning': 'any'
+      .post(
+        `${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku`,
+        // JSON.stringify({
+        //   rm_kode: newData.rm_kode,
+        //   rm_nama: newData.rm_nama,
+        //   rm_satuan: newData.rm_satuan
+        // }),
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'any',
+            Accept: 'application/json'
+          }
         }
-      })
+      )
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
@@ -150,8 +160,7 @@ export default function BahanBakuCabang() {
         formData,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'ngrok-skip-browser-warning': 'any'
+            'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
       )
@@ -226,7 +235,7 @@ export default function BahanBakuCabang() {
             <TextField
               required
               id="outlined"
-              label="rm_kode"
+              label="Rm Kode"
               type="text"
               onChange={(e) =>
                 setNewData({ ...newData, rm_kode: e.target.value })
@@ -236,7 +245,7 @@ export default function BahanBakuCabang() {
             <TextField
               required
               id="outlined"
-              label="rm_nama"
+              label="Rm Nama"
               type="text"
               onChange={(e) =>
                 setNewData({ ...newData, rm_nama: e.target.value })
@@ -246,7 +255,7 @@ export default function BahanBakuCabang() {
             <TextField
               required
               id="outlined"
-              label="rm_satuan"
+              label="Rm Satuan"
               type="text"
               onChange={(e) =>
                 setNewData({ ...newData, rm_satuan: e.target.value })

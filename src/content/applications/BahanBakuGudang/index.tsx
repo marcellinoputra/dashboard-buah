@@ -129,7 +129,8 @@ export default function BahanBakuGudang() {
     await axios
       .post(`${import.meta.env.VITE_API_URL}/v1/gudang/bahan-baku`, formData, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'ngrok-skip-browser-warning': 'any'
         }
       })
       .then((res) => {
@@ -197,7 +198,7 @@ export default function BahanBakuGudang() {
             <TextField
               required
               id="outlined"
-              label="rm_kode"
+              label="Rm Kode"
               type="text"
               onChange={(e) =>
                 setNewData({ ...newData, rm_kode: e.target.value })
@@ -207,7 +208,7 @@ export default function BahanBakuGudang() {
             <TextField
               required
               id="outlined"
-              label="rm_nama"
+              label="Rm Nama"
               type="text"
               onChange={(e) =>
                 setNewData({ ...newData, rm_nama: e.target.value })
@@ -217,7 +218,7 @@ export default function BahanBakuGudang() {
             <TextField
               required
               id="outlined"
-              label="rm_konversi"
+              label="RM Konversi"
               type="number"
               onChange={(e) =>
                 setNewData({
@@ -230,7 +231,7 @@ export default function BahanBakuGudang() {
             <TextField
               required
               id="outlined"
-              label="rm_keterangan"
+              label="Rm Keterangan"
               type="text"
               onChange={(e) =>
                 setNewData({
@@ -243,7 +244,7 @@ export default function BahanBakuGudang() {
             <TextField
               required
               id="outlined"
-              label="cek"
+              label="Cek"
               type="text"
               onChange={(e) =>
                 setNewData({
@@ -256,7 +257,7 @@ export default function BahanBakuGudang() {
             <TextField
               required
               id="outlined"
-              label="help_mutasi"
+              label="Help Mutasi"
               type="text"
               onChange={(e) =>
                 setNewData({
@@ -269,7 +270,7 @@ export default function BahanBakuGudang() {
             <TextField
               required
               id="outlined"
-              label="gdg"
+              label="GDG"
               type="text"
               onChange={(e) =>
                 setNewData({

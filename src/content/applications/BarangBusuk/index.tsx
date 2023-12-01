@@ -124,7 +124,7 @@ export default function BarangBusuk() {
         formData,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'ngrok-skip-browser-warning': 'any'
           }
         }
@@ -183,7 +183,7 @@ export default function BarangBusuk() {
             <TextField
               required
               id="outlined"
-              label="kode_bb"
+              label="Kode BB"
               type="text"
               onChange={(e) =>
                 setNewData({ ...newData, kode_bb: e.target.value })
@@ -193,7 +193,7 @@ export default function BarangBusuk() {
             <TextField
               required
               id="outlined"
-              label="nama_bb"
+              label="Nama BB"
               type="text"
               onChange={(e) =>
                 setNewData({ ...newData, nama_bb: e.target.value })
@@ -203,7 +203,17 @@ export default function BarangBusuk() {
             <TextField
               required
               id="outlined"
-              label="tanggal_bb"
+              label="Satuan"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, satuan: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Tanggal BB"
               type="text"
               onChange={(e) =>
                 setNewData({ ...newData, tanggal_bb: e.target.value })
@@ -213,7 +223,7 @@ export default function BarangBusuk() {
             <TextField
               required
               id="outlined"
-              label="total"
+              label="Total"
               type="number"
               onChange={(e) =>
                 setNewData({ ...newData, total: parseInt(e.target.value) })
