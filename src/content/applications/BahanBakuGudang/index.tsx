@@ -1,5 +1,8 @@
 import {
+  Box,
   Button,
+  FormControl,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -7,9 +10,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography
 } from '@mui/material';
 import axios from 'axios';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 
@@ -52,7 +57,7 @@ export default function BahanBakuGudang() {
     rm_kode: '',
     rm_nama: '',
     rm_konversi: 0,
-    rm_ket: 0,
+    rm_ket: '',
     cek: '',
     help_mutasi: '',
     gdg: '',
@@ -63,7 +68,7 @@ export default function BahanBakuGudang() {
     rm_kode: '',
     rm_nama: '',
     rm_konversi: 0,
-    rm_ket: 0,
+    rm_ket: '',
     cek: '',
     help_mutasi: '',
     gdg: '',
@@ -94,13 +99,44 @@ export default function BahanBakuGudang() {
   //Get Data
   async function getData() {
     await axios
-      .get(`${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku`, {
+      .get(`${import.meta.env.VITE_API_URL}/v1/gudang/bahan-baku`, {
         headers: {
           'ngrok-skip-browser-warning': 'any'
         }
       })
       .then((res) => {
         return setDataBbGudang(res.data.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  //Create Data
+  async function createData(e: any) {
+    e.preventDefault();
+
+    let formData = new FormData();
+
+    formData.append('rm_kode', newData.rm_kode);
+    formData.append('rm_nama', newData.rm_nama);
+    formData.append('rm_konversi', newData.rm_konversi.toString());
+    formData.append('rm_ket', newData.rm_ket);
+    formData.append('cek', newData.cek);
+    formData.append('help_mutasi', newData.help_mutasi);
+    formData.append('gdg', newData.gdg);
+
+    await axios
+      .post(`${import.meta.env.VITE_API_URL}/v1/gudang/bahan-baku`, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalCreate(false);
+          window.location.reload();
+        }
       })
       .catch((err) => {
         alert(err);
@@ -122,6 +158,13 @@ export default function BahanBakuGudang() {
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
+        onClick={openModalCreate}
+      >
+        Add Data
+      </Button>
+      <Button
+        variant="contained"
+        sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
       >
         <CSVLink
           data={dataBbGudang}
@@ -130,6 +173,133 @@ export default function BahanBakuGudang() {
           Download CSV
         </CSVLink>
       </Button>
+      <Modal
+        open={isModalCreate}
+        onClose={closeModalCreate}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="rm_kode"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, rm_kode: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="rm_nama"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, rm_nama: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="rm_konversi"
+              type="number"
+              onChange={(e) =>
+                setNewData({
+                  ...newData,
+                  rm_konversi: parseInt(e.target.value)
+                })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="rm_keterangan"
+              type="text"
+              onChange={(e) =>
+                setNewData({
+                  ...newData,
+                  rm_ket: e.target.value
+                })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="cek"
+              type="text"
+              onChange={(e) =>
+                setNewData({
+                  ...newData,
+                  cek: e.target.value
+                })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="help_mutasi"
+              type="text"
+              onChange={(e) =>
+                setNewData({
+                  ...newData,
+                  help_mutasi: e.target.value
+                })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="gdg"
+              type="text"
+              onChange={(e) =>
+                setNewData({
+                  ...newData,
+                  gdg: e.target.value
+                })
+              }
+              style={textFieldStyle}
+            />
+            <Button
+              onClick={createData}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -164,8 +334,16 @@ export default function BahanBakuGudang() {
                 <TableCell align="left">{data.cek}</TableCell>
                 <TableCell align="left">{data.help_mutasi}</TableCell>
                 <TableCell align="left">{data.gdg}</TableCell>
-                <TableCell align="left">{data.createdAt}</TableCell>
-                <TableCell align="left">{data.updatedAt}</TableCell>
+                <TableCell align="left">
+                  {moment(data.createdAt)
+                    .utc()
+                    .format('MMMM Do YYYY, h:mm:ss a')}
+                </TableCell>
+                <TableCell align="left">
+                  {moment(data.updatedAt)
+                    .utc()
+                    .format('MMMM Do YYYY, h:mm:ss a')}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

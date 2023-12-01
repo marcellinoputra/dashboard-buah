@@ -16,6 +16,8 @@ import {
 import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import axios from 'axios';
+import { Edit } from '@mui/icons-material';
+import moment from 'moment';
 
 interface DataBbCabang {
   id: number;
@@ -74,13 +76,19 @@ export default function BahanBakuCabang() {
 
   const closeModalCreate = () => setIsModalCreate(false);
 
-  const openModalEdit = () => setIsModalEdit(true);
+  // const openModalEdit = () => setIsModalEdit(true);
 
   const closeModalEdit = () => setIsModalEdit(false);
 
   const openModalDelete = () => setIsModalDelete(true);
 
   const closeModalDelete = () => setIsModalDelete(false);
+
+  function handleEditData() {
+    const updateData = {};
+
+    setIsModalEdit(true);
+  }
 
   //Get Data
   async function getData() {
@@ -111,7 +119,8 @@ export default function BahanBakuCabang() {
     await axios
       .post(`${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku`, formData, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'ngrok-skip-browser-warning': 'any'
         }
       })
       .then((res) => {
@@ -126,7 +135,7 @@ export default function BahanBakuCabang() {
   }
 
   //Update Data
-  async function updateData(e: any) {
+  async function submitEdit(e: any) {
     e.preventDefault();
 
     let formData = new FormData();
@@ -141,7 +150,8 @@ export default function BahanBakuCabang() {
         formData,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'ngrok-skip-browser-warning': 'any'
           }
         }
       )
@@ -159,7 +169,12 @@ export default function BahanBakuCabang() {
   async function deleteData() {
     await axios
       .delete(
-        `${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku/${editData.id}`
+        `${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku/${editData.id}`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': 'any'
+          }
+        }
       )
       .then((res) => {
         if (res.status === 200) {
@@ -259,6 +274,60 @@ export default function BahanBakuCabang() {
           </FormControl>
         </Box>
       </Modal>
+      <Modal
+        open={isModalEdit}
+        onClose={closeModalEdit}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '10'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Edit Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="rm_kode"
+              type="text"
+              onChange={(e) =>
+                setEditData({ ...editData, rm_kode: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="rm_nama"
+              type="text"
+              onChange={(e) =>
+                setEditData({ ...editData, rm_nama: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="rm_satuan"
+              type="text"
+              onChange={(e) =>
+                setEditData({ ...editData, rm_satuan: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+          </FormControl>
+        </Box>
+      </Modal>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
@@ -280,6 +349,7 @@ export default function BahanBakuCabang() {
               <TableCell align="left">RM Satuan</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Updated At</TableCell>
+              <TableCell align="left">Edit</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -295,8 +365,25 @@ export default function BahanBakuCabang() {
                   <TableCell align="left">{data.rm_kode}</TableCell>
                   <TableCell align="left">{data.rm_nama}</TableCell>
                   <TableCell align="left">{data.rm_satuan}</TableCell>
-                  <TableCell align="left">{data.createdAt}</TableCell>
-                  <TableCell align="left">{data.updatedAt}</TableCell>
+                  <TableCell align="left">
+                    {moment(data.createdAt)
+                      .utc()
+                      .format('MMMM Do YYYY, h:mm:ss a')}
+                  </TableCell>
+                  <TableCell align="left">
+                    {moment(data.updatedAt)
+                      .utc()
+                      .format('MMMM Do YYYY, h:mm:ss a')}
+                  </TableCell>
+                  <TableCell align="left">
+                    <Button
+                      onClick={() => {
+                        handleEditData();
+                      }}
+                    >
+                      <Edit />
+                    </Button>
+                  </TableCell>
                 </TableRow>
               );
             })}

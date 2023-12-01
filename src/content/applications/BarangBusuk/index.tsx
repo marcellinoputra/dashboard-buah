@@ -1,5 +1,8 @@
 import {
+  Box,
   Button,
+  FormControl,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -7,9 +10,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography
 } from '@mui/material';
 import axios from 'axios';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 
@@ -23,6 +28,25 @@ interface DataBarangBusukCabang {
   createdAt: Date;
   updatedAt: Date;
 }
+
+const boxStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  overflowY: 'scroll',
+  height: 500,
+  p: 4
+};
+
+const textFieldStyle = {
+  marginBottom: 10,
+  marginTop: 10
+};
 
 export default function BarangBusuk() {
   const [dataBbusukCabang, setDataBbusukCabang] = useState<
@@ -83,6 +107,39 @@ export default function BarangBusuk() {
       });
   }
 
+  async function createData(e: any) {
+    e.preventDefault();
+
+    let formData = new FormData();
+
+    formData.append('kode_bb', newData.kode_bb);
+    formData.append('nama_bb', newData.nama_bb);
+    formData.append('satuan', newData.satuan);
+    formData.append('tanggal_bb', newData.tanggal_bb);
+    formData.append('total', newData.total.toString());
+
+    await axios
+      .post(
+        `${import.meta.env.VITE_API_URL}/v1/cabang/busuk-cabang`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'ngrok-skip-browser-warning': 'any'
+          }
+        }
+      )
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalCreate(false);
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
   useEffect(() => {
     getData();
   }, []);
@@ -95,6 +152,95 @@ export default function BarangBusuk() {
       >
         Barang Busuk
       </Typography>
+      <Button
+        variant="contained"
+        sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
+        onClick={openModalCreate}
+      >
+        Add Data
+      </Button>
+      <Modal
+        open={isModalCreate}
+        onClose={closeModalCreate}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="kode_bb"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, kode_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="nama_bb"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, nama_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="tanggal_bb"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, tanggal_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="total"
+              type="number"
+              onChange={(e) =>
+                setNewData({ ...newData, total: parseInt(e.target.value) })
+              }
+              style={textFieldStyle}
+            />
+            <Button
+              onClick={createData}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
@@ -134,8 +280,16 @@ export default function BarangBusuk() {
                 <TableCell align="left">{data.satuan}</TableCell>
                 <TableCell align="left">{data.tanggal_bb}</TableCell>
                 <TableCell align="left">{data.total}</TableCell>
-                <TableCell align="left">{data.createdAt}</TableCell>
-                <TableCell align="left">{data.updatedAt}</TableCell>
+                <TableCell align="left">
+                  {moment(data.createdAt)
+                    .utc()
+                    .format('MMMM Do YYYY, h:mm:ss a')}
+                </TableCell>
+                <TableCell align="left">
+                  {moment(data.updatedAt)
+                    .utc()
+                    .format('MMMM Do YYYY, h:mm:ss a')}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

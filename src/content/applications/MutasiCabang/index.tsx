@@ -1,5 +1,8 @@
 import {
+  Box,
   Button,
+  FormControl,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -7,6 +10,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography
 } from '@mui/material';
 import axios from 'axios';
@@ -26,6 +30,25 @@ interface DataMutasiCabang {
   createdAt: Date;
   updatedAt: Date;
 }
+
+const boxStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  overflowY: 'scroll',
+  height: 500,
+  p: 4
+};
+
+const textFieldStyle = {
+  marginBottom: 10,
+  marginTop: 10
+};
 
 export default function MutasiCabang() {
   const [dataMutasiCabang, setDataMutasiCabang] = useState<DataMutasiCabang[]>(
@@ -76,13 +99,48 @@ export default function MutasiCabang() {
 
   async function getData() {
     await axios
-      .get(`${import.meta.env.VITE_API_URL}/v1/cabang/mutasi-caban`, {
+      .get(`${import.meta.env.VITE_API_URL}/v1/cabang/mutasi-cabang`, {
         headers: {
           'ngrok-skip-browser-warning': 'any'
         }
       })
       .then((res) => {
         return setDataMutasiCabang(res.data.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  async function createData(e: any) {
+    e.preventDefault();
+
+    let formData = new FormData();
+
+    formData.append('kode_bb', newData.kode_bb);
+    formData.append('nama_bb', newData.nama_bb);
+    formData.append('satuan', newData.satuan);
+    formData.append('tanggal_mutasi', newData.tanggal_mutasi);
+    formData.append('mutasi_terima', newData.mutasi_terima.toString());
+    formData.append('mutasi_kirim', newData.mutasi_kirim.toString());
+    formData.append('keterangan', newData.keterangan);
+
+    await axios
+      .post(
+        `${import.meta.env.VITE_API_URL}/v1/cabang/mutasi-cabang`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'ngrok-skip-browser-warning': 'any'
+          }
+        }
+      )
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalCreate(false);
+          window.location.reload();
+        }
       })
       .catch((err) => {
         alert(err);
@@ -101,6 +159,132 @@ export default function MutasiCabang() {
       >
         Mutasi Cabang
       </Typography>
+      <Button
+        variant="contained"
+        sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
+        onClick={openModalCreate}
+      >
+        Add Data
+      </Button>
+      <Modal
+        open={isModalCreate}
+        onClose={closeModalCreate}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="Kode BB"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, kode_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="nama_bb"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, nama_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Satuan"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, satuan: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Tanggal Mutasi"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, tanggal_mutasi: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Mutasi Kirim"
+              type="number"
+              onChange={(e) =>
+                setNewData({
+                  ...newData,
+                  mutasi_kirim: parseInt(e.target.value)
+                })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Mutasi Terima"
+              type="number"
+              onChange={(e) =>
+                setNewData({
+                  ...newData,
+                  mutasi_terima: parseInt(e.target.value)
+                })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Keterangan"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, keterangan: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+
+            <Button
+              onClick={createData}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}

@@ -9,6 +9,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
+import axios from 'axios';
 import moment from 'moment';
 import { useState } from 'react';
 import { CSVLink } from 'react-csv';
@@ -23,6 +24,25 @@ interface DataStockOpnameCabang {
   createdAt: Date;
   updatedAt: Date;
 }
+
+const boxStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  overflowY: 'scroll',
+  height: 500,
+  p: 4
+};
+
+const textFieldStyle = {
+  marginBottom: 10,
+  marginTop: 10
+};
 
 export default function StockOpnameCabang() {
   const [dataStockOpnameCabang, setStockOpnameCabang] = useState<
@@ -45,6 +65,32 @@ export default function StockOpnameCabang() {
     total: 0,
     updatedAt: new Date()
   });
+
+  //Modal Create
+  const [isModalCreate, setIsModalCreate] = useState(false);
+
+  //Modal Delete
+  const [isModalDelete, setIsModalDelete] = useState(false);
+
+  //Modal Edit
+  const [isModalEdit, setIsModalEdit] = useState(false);
+
+  const openModalCreate = () => setIsModalCreate(true);
+
+  const closeModalCreate = () => setIsModalCreate(false);
+
+  // const openModalEdit = () => setIsModalEdit(true);
+
+  const closeModalEdit = () => setIsModalEdit(false);
+
+  const openModalDelete = () => setIsModalDelete(true);
+
+  const closeModalDelete = () => setIsModalDelete(false);
+
+
+  async function getData(){
+    await axios.get(`${import.meta.env.VITE_API_URL}/`)
+  }
 
   return (
     <>
