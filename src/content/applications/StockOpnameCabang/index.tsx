@@ -1,6 +1,9 @@
 import { Delete, Edit } from '@mui/icons-material';
 import {
+  Box,
   Button,
+  FormControl,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -8,6 +11,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography
 } from '@mui/material';
 import axios from 'axios';
@@ -103,6 +107,37 @@ export default function StockOpnameCabang() {
       });
   }
 
+  //Create Data
+  async function createData(e: any) {
+    e.preventDefault();
+
+    let formData = new FormData();
+
+    formData.append('kode_bb', newData.kode_bb);
+    formData.append('nama_bb', newData.nama_bb);
+    formData.append('satuan', newData.satuan);
+    formData.append('tempat_bb', newData.tempat_bb);
+    formData.append('total', newData.total.toString());
+
+    await axios
+      .post(`${import.meta.env.VITE_API_URL}/v1/cabang/so-cabang`, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalCreate(false);
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  //Delete Data
   async function deleteData(id: number) {
     await axios
       .delete(`${import.meta.env.VITE_API_URL}/v1/cabang/so-cabang/${id}`, {
@@ -128,6 +163,105 @@ export default function StockOpnameCabang() {
       >
         Stock Opname Cabang
       </Typography>
+      <Button
+        variant="contained"
+        sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
+        onClick={openModalCreate}
+      >
+        Add Data
+      </Button>
+      <Modal
+        open={isModalCreate}
+        onClose={closeModalCreate}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="Kode BB"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, kode_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Nama BB"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, nama_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Satuan"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, satuan: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Tempat BB"
+              type="text"
+              onChange={(e) =>
+                setNewData({ ...newData, tempat_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Total"
+              type="number"
+              onChange={(e) =>
+                setNewData({ ...newData, total: parseInt(e.target.value) })
+              }
+              style={textFieldStyle}
+            />
+            <Button
+              onClick={createData}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
