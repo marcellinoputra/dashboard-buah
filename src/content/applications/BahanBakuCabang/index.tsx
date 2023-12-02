@@ -2,8 +2,11 @@ import {
   Box,
   Button,
   FormControl,
+  InputLabel,
+  MenuItem,
   Modal,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -18,6 +21,7 @@ import { CSVLink } from 'react-csv';
 import axios from 'axios';
 import { Delete, Edit } from '@mui/icons-material';
 import moment from 'moment';
+import { satuan } from 'src/vendor/satuan';
 
 interface DataBbCabang {
   id: number;
@@ -252,7 +256,7 @@ export default function BahanBakuCabang() {
               }
               style={textFieldStyle}
             />
-            <TextField
+            {/* <TextField
               required
               id="outlined"
               label="Rm Satuan"
@@ -261,7 +265,31 @@ export default function BahanBakuCabang() {
                 setNewData({ ...newData, rm_satuan: e.target.value })
               }
               style={textFieldStyle}
-            />
+            /> */}
+            <FormControl style={textFieldStyle}>
+              <InputLabel id="demo-simple-select-autowidth-label">
+                Rm Satuan
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                onChange={(e) =>
+                  setNewData({ ...newData, rm_satuan: e.target.value })
+                }
+                autoWidth
+                label="Rm Satuan"
+                defaultValue=""
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {satuan.map((satuan) => (
+                  <MenuItem key={satuan.key} value={satuan.value}>
+                    {satuan.render}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Button
               onClick={createData}
               type="submit"

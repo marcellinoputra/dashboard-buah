@@ -3,8 +3,11 @@ import {
   Box,
   Button,
   FormControl,
+  InputLabel,
+  MenuItem,
   Modal,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -18,6 +21,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
+import { satuan } from 'src/vendor/satuan';
 
 interface DataMakananCabang {
   id: number;
@@ -246,16 +250,30 @@ export default function MakananCabang() {
               }
               style={textFieldStyle}
             />
-            <TextField
-              required
-              id="outlined"
-              label="satuan"
-              type="text"
-              onChange={(e) =>
-                setNewData({ ...newData, satuan: e.target.value })
-              }
-              style={textFieldStyle}
-            />
+            <FormControl style={textFieldStyle}>
+              <InputLabel id="demo-simple-select-autowidth-label">
+                Satuan
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                onChange={(e) =>
+                  setNewData({ ...newData, satuan: e.target.value })
+                }
+                autoWidth
+                label="Satuan"
+                defaultValue=""
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {satuan.map((satuan) => (
+                  <MenuItem key={satuan.key} value={satuan.value}>
+                    {satuan.render}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               required
               id="outlined"
