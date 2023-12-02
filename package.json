@@ -48,6 +48,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
+    "dev": "vite dev",
     "test": "vitest",
     "test:coverage": "vitest run --coverage --watch=false",
     "lint": "eslint .",
