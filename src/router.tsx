@@ -7,12 +7,11 @@ import BaseLayout from 'src/layouts/BaseLayout';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
 
-const Loader = (Component) => (props) =>
-  (
-    <Suspense fallback={<SuspenseLoader />}>
-      <Component {...props} />
-    </Suspense>
-  );
+const Loader = (Component) => (props) => (
+  <Suspense fallback={<SuspenseLoader />}>
+    <Component {...props} />
+  </Suspense>
+);
 
 // Pages
 
@@ -37,20 +36,40 @@ const UserSettings = Loader(
   lazy(() => import('src/content/applications/Users/settings'))
 );
 
-const CekTerimaBarang = Loader(
-  lazy(() => import('src/content/applications/CekTerimaBarang'))
+const BarangBusuk = Loader(
+  lazy(() => import('src/content/applications/BarangBusuk'))
 );
 
-const DaftarPermintaanBarang = Loader(
-  lazy(() => import('src/content/applications/DaftarPermintaan'))
+const BahanBakuCabang = Loader(
+  lazy(() => import('src/content/applications/BahanBakuCabang'))
 );
 
-const FormPermintaanBarang = Loader(
-  lazy(() => import('src/content/applications/FormPermintaan'))
+const BeliCabang = Loader(
+  lazy(() => import('src/content/applications/BeliCabang'))
 );
 
-const PermintaanBarang = Loader(
-  lazy(() => import('src/content/applications/PermintaanBarang'))
+const KodeSupplierCabang = Loader(
+  lazy(() => import('src/content/applications/KodeSupplierGudang'))
+);
+
+const MakananCabang = Loader(
+  lazy(() => import('src/content/applications/MakananCabang'))
+);
+
+const MutasiCabang = Loader(
+  lazy(() => import('src/content/applications/MutasiCabang'))
+);
+
+const StockOpnameCabang = Loader(
+  lazy(() => import('src/content/applications/StockOpnameCabang'))
+);
+
+const DataKirimGudang = Loader(
+  lazy(() => import('src/content/applications/DataKirimGudang'))
+);
+
+const BahanBakuGudang = Loader(
+  lazy(() => import('src/content/applications/BahanBakuGudang'))
 );
 
 //Auth
@@ -161,20 +180,40 @@ const routes: RouteObject[] = [
         element: <Messenger />
       },
       {
-        path: 'permintaanbarang',
-        element: <PermintaanBarang />
+        path: 'bahanbakucabang',
+        element: <BahanBakuCabang />
       },
       {
-        path: 'daftarpermintaan',
-        element: <DaftarPermintaanBarang />
+        path: 'bahanbakugudang',
+        element: <BahanBakuGudang />
       },
       {
-        path: 'formpermintaan',
-        element: <FormPermintaanBarang />
+        path: 'barangbusuk',
+        element: <BarangBusuk />
       },
       {
-        path: 'cekterimabarang',
-        element: <CekTerimaBarang />
+        path: 'belicabang',
+        element: <BeliCabang />
+      },
+      {
+        path: 'datakirimgudang',
+        element: <DataKirimGudang />
+      },
+      {
+        path: 'kodesuppliercabang',
+        element: <KodeSupplierCabang />
+      },
+      {
+        path: 'makanancabang',
+        element: <MakananCabang />
+      },
+      {
+        path: 'mutasicabang',
+        element: <MutasiCabang />
+      },
+      {
+        path: 'stockopnamecabang',
+        element: <StockOpnameCabang />
       }
     ]
   },
