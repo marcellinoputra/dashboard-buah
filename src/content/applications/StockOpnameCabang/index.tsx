@@ -1,3 +1,4 @@
+import { Delete, Edit } from '@mui/icons-material';
 import {
   Button,
   Paper,
@@ -87,9 +88,36 @@ export default function StockOpnameCabang() {
 
   const closeModalDelete = () => setIsModalDelete(false);
 
+  async function getData() {
+    await axios
+      .get(`${import.meta.env.VITE_API_URL}/v1/cabang/so-cabang`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        return setStockOpnameCabang(res.data.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
 
-  async function getData(){
-    await axios.get(`${import.meta.env.VITE_API_URL}/`)
+  async function deleteData(id: number) {
+    await axios
+      .delete(`${import.meta.env.VITE_API_URL}/v1/cabang/so-cabang/${id}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
 
   return (
@@ -123,6 +151,8 @@ export default function StockOpnameCabang() {
               <TableCell align="left">Total</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Updated At</TableCell>
+              <TableCell align="left">Edit</TableCell>
+              <TableCell align="left">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -148,6 +178,20 @@ export default function StockOpnameCabang() {
                   {moment(data.createdAt)
                     .utc()
                     .format('MMMM Do YYYY, h:mm:ss a')}
+                </TableCell>
+                <TableCell align="left">
+                  <Button
+                    onClick={() => {
+                      // handleEditData();
+                    }}
+                  >
+                    <Edit />
+                  </Button>
+                </TableCell>
+                <TableCell align="left">
+                  <Button onClick={() => deleteData(data.id)}>
+                    <Delete />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

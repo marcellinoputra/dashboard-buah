@@ -1,3 +1,4 @@
+import { Delete, Edit } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import {
   Typography
 } from '@mui/material';
 import axios from 'axios';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 
@@ -163,6 +165,24 @@ export default function MakananCabang() {
           setIsModalCreate(false);
           window.location.reload();
         }
+      });
+  }
+
+  //Delete Data
+  async function deleteData(id: number) {
+    await axios
+      .delete(`${import.meta.env.VITE_API_URL}/v1/cabang/makanan/${id}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert(err);
       });
   }
 
@@ -413,6 +433,8 @@ export default function MakananCabang() {
               <TableCell align="left">Input Stock</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Updated At</TableCell>
+              <TableCell align="left">Edit</TableCell>
+              <TableCell align="left">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -440,6 +462,30 @@ export default function MakananCabang() {
                 <TableCell align="left">{data.input_stock}</TableCell>
                 <TableCell align="left">{data.createdAt}</TableCell>
                 <TableCell align="left">{data.updatedAt}</TableCell>
+                <TableCell align="left">
+                  {moment(data.createdAt)
+                    .utc()
+                    .format('MMMM Do YYYY, h:mm:ss a')}
+                </TableCell>
+                <TableCell align="left">
+                  {moment(data.updatedAt)
+                    .utc()
+                    .format('MMMM Do YYYY, h:mm:ss a')}
+                </TableCell>
+                <TableCell align="left">
+                  <Button
+                    onClick={() => {
+                      // handleEditData();
+                    }}
+                  >
+                    <Edit />
+                  </Button>
+                </TableCell>
+                <TableCell align="left">
+                  <Button onClick={() => deleteData(data.id)}>
+                    <Delete />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

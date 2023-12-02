@@ -1,3 +1,4 @@
+import { Delete, Edit } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -134,6 +135,24 @@ export default function DataKirimGudang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  //Delete Data
+  async function deleteData(id: number) {
+    await axios
+      .delete(`${import.meta.env.VITE_API_URL}/v1/gudang/data-kirim/${id}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200) {
           window.location.reload();
         }
       })
@@ -294,6 +313,8 @@ export default function DataKirimGudang() {
               <TableCell align="left">Satuan</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Updated At</TableCell>
+              <TableCell align="left">Edit</TableCell>
+              <TableCell align="left">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -314,6 +335,20 @@ export default function DataKirimGudang() {
                 <TableCell align="left">{data.satuan}</TableCell>
                 <TableCell align="left">{data.createdAt}</TableCell>
                 <TableCell align="left">{data.updatedAt}</TableCell>
+                <TableCell align="left">
+                  <Button
+                    onClick={() => {
+                      // handleEditData();
+                    }}
+                  >
+                    <Edit />
+                  </Button>
+                </TableCell>
+                <TableCell align="left">
+                  <Button onClick={() => deleteData(data.id)}>
+                    <Delete />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

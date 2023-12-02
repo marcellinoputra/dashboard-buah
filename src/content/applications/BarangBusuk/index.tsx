@@ -1,3 +1,4 @@
+import { Delete, Edit } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -83,7 +84,31 @@ export default function BarangBusuk() {
 
   const closeModalCreate = () => setIsModalCreate(false);
 
-  const openModalEdit = () => setIsModalEdit(true);
+  // const openModalEdit = () => setIsModalEdit(true);
+  // function openModalEdit({
+  //   kode_bb,
+  //   nama_bb,
+  //   satuan,
+  //   tanggal_bb,
+  //   total
+  // }: {
+  //   kode_bb: string;
+  //   nama_bb: string;
+  //   satuan: string;
+  //   tanggal_bb: string;
+  //   total: number;
+  // }) {
+  //   const updateData = {
+  //     editKodeBb: kode_bb,
+  //     editNamaBb: nama_bb,
+  //     editSatuan: satuan,
+  //     editTanggalBb: tanggal_bb,
+  //     editTotal: total
+  //   };
+
+  //   setEditData(updateData);
+  //   setIsModalEdit(true);
+  // }
 
   const closeModalEdit = () => setIsModalEdit(false);
 
@@ -132,6 +157,57 @@ export default function BarangBusuk() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  //Update Data
+  async function submitEdit({ e, id }: { e: any; id: number }) {
+    e.preventDefault();
+
+    let formData = new FormData();
+
+    formData.append('kode_bb', newData.kode_bb);
+    formData.append('nama_bb', newData.nama_bb);
+    formData.append('satuan', newData.satuan);
+    formData.append('tanggal_bb', newData.tanggal_bb);
+    formData.append('total', newData.total.toString());
+
+    axios
+      .put(
+        `${import.meta.env.VITE_API_URL}/v1/cabang/busuk-cabang/${id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+      )
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalEdit(false);
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  //Delete Data
+  async function deleteData(id: number) {
+    await axios
+      .delete(`${import.meta.env.VITE_API_URL}/v1/cabang/beli-cabang/${id}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200) {
           window.location.reload();
         }
       })
@@ -251,6 +327,85 @@ export default function BarangBusuk() {
           </FormControl>
         </Box>
       </Modal>
+      <Modal
+        open={isModalEdit}
+        onClose={closeModalEdit}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '10'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Edit Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="Kode BB"
+              type="text"
+              value={editData.kode_bb}
+              onChange={(e) =>
+                setEditData({ ...editData, kode_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Nama BB"
+              type="text"
+              value={editData.nama_bb}
+              onChange={(e) =>
+                setEditData({ ...editData, nama_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Satuan"
+              type="text"
+              value={editData.satuan}
+              onChange={(e) =>
+                setEditData({ ...editData, satuan: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Tanggal BB"
+              type="text"
+              value={editData.tanggal_bb}
+              onChange={(e) =>
+                setEditData({ ...editData, tanggal_bb: e.target.value })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Total"
+              type="number"
+              value={editData.total}
+              onChange={(e) =>
+                setEditData({ ...editData, total: parseInt(e.target.value) })
+              }
+              style={textFieldStyle}
+            />
+          </FormControl>
+        </Box>
+      </Modal>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
@@ -274,6 +429,8 @@ export default function BarangBusuk() {
               <TableCell align="left">Total</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Updated At</TableCell>
+              <TableCell align="left">Edit</TableCell>
+              <TableCell align="left">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -299,6 +456,23 @@ export default function BarangBusuk() {
                   {moment(data.updatedAt)
                     .utc()
                     .format('MMMM Do YYYY, h:mm:ss a')}
+                </TableCell>
+                <TableCell align="left">
+                  <Button
+                    // onClick={() => {
+                    //   openModalEdit(
+                    //     data.kode_bb,
+                    //     data.nama
+                    //   );
+                    // }}
+                  >
+                    <Edit />
+                  </Button>
+                </TableCell>
+                <TableCell align="left">
+                  <Button onClick={() => deleteData(data.id)}>
+                    <Delete />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

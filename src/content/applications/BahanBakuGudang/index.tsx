@@ -144,6 +144,24 @@ export default function BahanBakuGudang() {
       });
   }
 
+  //Delete Data
+  async function deleteData(id: number) {
+    await axios
+      .delete(`${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku/${id}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
   useEffect(() => {
     getData();
   }, []);

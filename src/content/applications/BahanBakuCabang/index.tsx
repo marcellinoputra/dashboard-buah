@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import axios from 'axios';
-import { Edit } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 import moment from 'moment';
 
 interface DataBbCabang {
@@ -175,20 +175,20 @@ export default function BahanBakuCabang() {
       });
   }
 
-  async function deleteData() {
+  async function deleteData(id: number) {
     await axios
-      .delete(
-        `${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku/${editData.id}`,
-        {
-          headers: {
-            'ngrok-skip-browser-warning': 'any'
-          }
+      .delete(`${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku/${id}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'any'
         }
-      )
+      })
       .then((res) => {
         if (res.status === 200) {
           window.location.reload();
         }
+      })
+      .catch((err) => {
+        alert(err);
       });
   }
 
@@ -359,6 +359,7 @@ export default function BahanBakuCabang() {
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Updated At</TableCell>
               <TableCell align="left">Edit</TableCell>
+              <TableCell align="left">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -391,6 +392,11 @@ export default function BahanBakuCabang() {
                       }}
                     >
                       <Edit />
+                    </Button>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Button onClick={() => deleteData(data.id)}>
+                      <Delete />
                     </Button>
                   </TableCell>
                 </TableRow>
