@@ -122,6 +122,7 @@ export default function BarangBusuk() {
 
   //Get Data
   async function getData() {
+    setDataBbusukCabang([])
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/cabang/busuk-cabang`, {
         headers: {
@@ -129,7 +130,7 @@ export default function BarangBusuk() {
         }
       })
       .then((res) => {
-        return setDataBbusukCabang(res.data.data);
+        setDataBbusukCabang(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -161,7 +162,7 @@ export default function BarangBusuk() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {
@@ -194,7 +195,7 @@ export default function BarangBusuk() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalEdit(false);
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {
@@ -212,7 +213,7 @@ export default function BarangBusuk() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {

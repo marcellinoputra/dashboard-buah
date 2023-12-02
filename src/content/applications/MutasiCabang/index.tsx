@@ -103,6 +103,7 @@ export default function MutasiCabang() {
   const closeModalDelete = () => setIsModalDelete(false);
 
   async function getData() {
+    setDataMutasiCabang([])
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/cabang/mutasi-cabang`, {
         headers: {
@@ -110,7 +111,7 @@ export default function MutasiCabang() {
         }
       })
       .then((res) => {
-        return setDataMutasiCabang(res.data.data);
+        setDataMutasiCabang(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -144,7 +145,7 @@ export default function MutasiCabang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {
@@ -162,7 +163,7 @@ export default function MutasiCabang() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {

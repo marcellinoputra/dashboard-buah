@@ -94,6 +94,7 @@ export default function KodeSupplierCabang() {
   const closeModalDelete = () => setIsModalDelete(false);
 
   async function getData() {
+    setDataKodeSupplier([])
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/gudang/kode-supplier`, {
         headers: {
@@ -101,7 +102,7 @@ export default function KodeSupplierCabang() {
         }
       })
       .then((res) => {
-        return setDataKodeSupplier(res.data.data);
+        setDataKodeSupplier(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -135,7 +136,7 @@ export default function KodeSupplierCabang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {
@@ -153,7 +154,7 @@ export default function KodeSupplierCabang() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {

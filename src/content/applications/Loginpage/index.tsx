@@ -12,8 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CekTerimaBarang from '../CekTerimaBarang';
 import { useNavigate } from 'react-router';
+import axios, { AxiosResponse } from 'axios';
+import { useState } from 'react';
 
 function Copyright(props: any) {
   return (
@@ -39,15 +40,25 @@ const defaultTheme = createTheme();
 export default function SignIn() {
   //Navigasi
   const navigate = useNavigate();
+  const [username, setUsername] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
-    });
-  };
+  const signInAccount = async () => {
+    await axios.post(`${import.meta.env.VITE_API_URL}/v1/auth/login`, {
+      username: username,
+      password: password
+    }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).then((res: AxiosResponse) => {
+      if (res.status === 200) {
+        console.log("Successfully sign in")
+        localStorage.setItem("data", JSON.stringify(res.data.data))
+        navigate('/dashboards/homepage', { replace: true })
+      }
+    })
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -69,18 +80,17 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
-            noValidate
             sx={{ mt: 1 }}
           >
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="Username"
+              autoComplete="username"
+              onChange={(e) => setUsername(e.target.value)}
               autoFocus
             />
             <TextField
@@ -91,27 +101,20 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
+              onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={() => navigate('/dashboards/homepage')}
+              onClick={() => signInAccount()}
             >
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+
               <Grid item>
                 <Link href="#" variant="body2">
                   {"Don't have an account? Sign Up"}

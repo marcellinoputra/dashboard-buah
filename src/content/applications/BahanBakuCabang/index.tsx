@@ -59,13 +59,10 @@ export default function BahanBakuCabang() {
     rm_satuan: '',
     createdAt: new Date()
   });
-  const [editData, setEditData] = useState({
-    id: 0,
-    rm_kode: '',
-    rm_nama: '',
-    rm_satuan: '',
-    updatedAt: new Date()
-  });
+  const [editId, setEditId] = useState(0)
+  const [editRmKode, setEditRmKode] = useState("")
+  const [editRmNama, setEditRmNama] = useState("")
+  const [editRmSatuan, setEditRmSatuan] = useState("")
 
   //Modal Create
   const [isModalCreate, setIsModalCreate] = useState(false);
@@ -88,14 +85,17 @@ export default function BahanBakuCabang() {
 
   const closeModalDelete = () => setIsModalDelete(false);
 
-  function handleEditData() {
-    const updateData = {};
-
+  function handleEditData(rm_kode: string, rm_nama: string, rm_satuan: string, id: number) {
+    setEditRmKode(rm_kode)
+    setEditRmNama(rm_nama)
+    setEditRmSatuan(rm_satuan)
+    setEditId(id)
     setIsModalEdit(true);
   }
 
   //Get Data
   async function getData() {
+    setDataBbGudang([]) // <-- Clear dulu datanya, baru fetching lagi
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku`, {
         headers: {
@@ -103,7 +103,7 @@ export default function BahanBakuCabang() {
         }
       })
       .then((res) => {
-        return setDataBbGudang(res.data.data);
+        setDataBbGudang(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -123,11 +123,6 @@ export default function BahanBakuCabang() {
     await axios
       .post(
         `${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku`,
-        // JSON.stringify({
-        //   rm_kode: newData.rm_kode,
-        //   rm_nama: newData.rm_nama,
-        //   rm_satuan: newData.rm_satuan
-        // }),
         formData,
         {
           headers: {
@@ -140,7 +135,7 @@ export default function BahanBakuCabang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {
@@ -149,29 +144,28 @@ export default function BahanBakuCabang() {
   }
 
   //Update Data
-  async function submitEdit(e: any) {
-    e.preventDefault();
-
+  async function updateData(id: number) {
     let formData = new FormData();
 
-    formData.append('rm_kode', newData.rm_kode);
-    formData.append('rm_nama', newData.rm_nama);
-    formData.append('rm_satuan', newData.rm_satuan);
+    formData.append('rm_kode', editRmKode);
+    formData.append('rm_nama', editRmNama);
+    formData.append('rm_satuan', editRmSatuan);
 
     axios
       .put(
-        `${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku/${editData.id}`,
+        `${import.meta.env.VITE_API_URL}/v1/cabang/bahan-baku/${id}`,
         formData,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
           }
         }
       )
       .then((res) => {
+        console.log(res.data)
         if (res.status === 200 || res.status === 201) {
           setIsModalEdit(false);
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {
@@ -188,7 +182,7 @@ export default function BahanBakuCabang() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {
@@ -336,9 +330,10 @@ export default function BahanBakuCabang() {
               required
               id="outlined"
               label="rm_kode"
+              defaultValue={editRmKode}
               type="text"
               onChange={(e) =>
-                setEditData({ ...editData, rm_kode: e.target.value })
+                setEditRmKode(e.target.value)
               }
               style={textFieldStyle}
             />
@@ -346,9 +341,10 @@ export default function BahanBakuCabang() {
               required
               id="outlined"
               label="rm_nama"
+              defaultValue={editRmNama}
               type="text"
               onChange={(e) =>
-                setEditData({ ...editData, rm_nama: e.target.value })
+                setEditRmNama(e.target.value)
               }
               style={textFieldStyle}
             />
@@ -356,12 +352,31 @@ export default function BahanBakuCabang() {
               required
               id="outlined"
               label="rm_satuan"
+              defaultValue={editRmSatuan}
               type="text"
               onChange={(e) =>
-                setEditData({ ...editData, rm_satuan: e.target.value })
+                setEditRmSatuan(e.target.value)
               }
               style={textFieldStyle}
             />
+            <Button
+              onClick={() => updateData(editId)}
+              type='button'
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit Edit
+            </Button>
           </FormControl>
         </Box>
       </Modal>
@@ -416,7 +431,7 @@ export default function BahanBakuCabang() {
                   <TableCell align="left">
                     <Button
                       onClick={() => {
-                        handleEditData();
+                        handleEditData(data.rm_kode, data.rm_nama, data.rm_satuan, data.id);
                       }}
                     >
                       <Edit />

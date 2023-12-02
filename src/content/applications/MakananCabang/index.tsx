@@ -123,6 +123,7 @@ export default function MakananCabang() {
 
   //Get Data
   async function getData() {
+    setDataMakananCabang([])
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/cabang/makanan`, {
         headers: {
@@ -130,7 +131,7 @@ export default function MakananCabang() {
         }
       })
       .then((res) => {
-        return setDataMakananCabang(res.data.data);
+        setDataMakananCabang(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -167,7 +168,7 @@ export default function MakananCabang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData();
         }
       });
   }
@@ -182,7 +183,7 @@ export default function MakananCabang() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {

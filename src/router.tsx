@@ -7,7 +7,7 @@ import BaseLayout from 'src/layouts/BaseLayout';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
 
-const Loader = (Component) => (props) => (
+const Loader = (Component: any) => (props: any) => (
   <Suspense fallback={<SuspenseLoader />}>
     <Component {...props} />
   </Suspense>
@@ -119,14 +119,20 @@ const StatusMaintenance = Loader(
   lazy(() => import('src/content/pages/Status/Maintenance'))
 );
 
+const isDataHave = localStorage.getItem("data")
+
+
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <SignIn />,
     children: [
       {
         path: '/',
-        element: <Navigate to="/dashboards/homepage" replace />
+        element: isDataHave === null ? <Navigate to="/sign-in" replace /> : <Navigate to="/dashboards/homepage" replace />
+      },
+      {
+        path: "/sign-in",
+        element: <SignIn />
       },
       {
         path: 'status',
@@ -163,21 +169,10 @@ const routes: RouteObject[] = [
     path: 'dashboards',
     element: <SidebarLayout />,
     children: [
-      {
-        path: '',
-        element: <Navigate to="crypto" replace />
-      },
+
       {
         path: 'homepage',
         element: <Homepage />
-      },
-      {
-        path: 'crypto',
-        element: <Crypto />
-      },
-      {
-        path: 'messenger',
-        element: <Messenger />
       },
       {
         path: 'bahanbakucabang',
@@ -214,37 +209,6 @@ const routes: RouteObject[] = [
       {
         path: 'stockopnamecabang',
         element: <StockOpnameCabang />
-      }
-    ]
-  },
-  {
-    path: 'management',
-    element: <SidebarLayout />,
-    children: [
-      {
-        path: '',
-        element: <Navigate to="transactions" replace />
-      },
-      {
-        path: 'transactions',
-        element: <Transactions />
-      },
-      {
-        path: 'profile',
-        children: [
-          {
-            path: '',
-            element: <Navigate to="details" replace />
-          },
-          {
-            path: 'details',
-            element: <UserProfile />
-          },
-          {
-            path: 'settings',
-            element: <UserSettings />
-          }
-        ]
       }
     ]
   },

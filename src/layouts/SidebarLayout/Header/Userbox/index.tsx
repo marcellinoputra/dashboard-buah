@@ -22,6 +22,13 @@ import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
+import { useNavigate } from 'react-router';
+
+interface JsonDataLocal {
+  id: number,
+  name: string,
+  role: number
+}
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -59,8 +66,11 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
+  const navigate = useNavigate()
+  const userLocal: JsonDataLocal = JSON.parse(localStorage.getItem("data") ?? "")
+
   const user = {
-    name: 'Catherine Pike',
+    name: userLocal.name ?? "Dev",
     avatar: '/static/images/avatars/1.jpg',
     jobtitle: 'Project Manager'
   };
@@ -135,7 +145,10 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button color="primary" fullWidth onClick={() => {
+            navigate("/", { replace: true })
+            localStorage.removeItem("data")
+          }}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
           </Button>

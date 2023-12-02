@@ -98,6 +98,7 @@ export default function BahanBakuGudang() {
 
   //Get Data
   async function getData() {
+    setDataBbGudang([])
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/gudang/bahan-baku`, {
         headers: {
@@ -105,7 +106,7 @@ export default function BahanBakuGudang() {
         }
       })
       .then((res) => {
-        return setDataBbGudang(res.data.data);
+        setDataBbGudang(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -136,7 +137,7 @@ export default function BahanBakuGudang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {
@@ -154,7 +155,7 @@ export default function BahanBakuGudang() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {

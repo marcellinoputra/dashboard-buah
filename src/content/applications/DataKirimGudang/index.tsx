@@ -101,6 +101,7 @@ export default function DataKirimGudang() {
 
   //Get Data
   async function getData() {
+    setDataKirimGudang([])
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/gudang/data-kirim`, {
         headers: {
@@ -108,7 +109,7 @@ export default function DataKirimGudang() {
         }
       })
       .then((res) => {
-        return setDataKirimGudang(res.data.data);
+        setDataKirimGudang(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -139,7 +140,7 @@ export default function DataKirimGudang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {
@@ -157,7 +158,7 @@ export default function DataKirimGudang() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData()
         }
       })
       .catch((err) => {

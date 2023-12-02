@@ -96,6 +96,7 @@ export default function BeliCabang() {
 
   //Get Data
   async function getData() {
+    setDataBeliCabang([])
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/cabang/beli-cabang`, {
         headers: {
@@ -103,7 +104,7 @@ export default function BeliCabang() {
         }
       })
       .then((res) => {
-        return setDataBeliCabang(res.data.data);
+        setDataBeliCabang(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -132,7 +133,7 @@ export default function BeliCabang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {
@@ -150,7 +151,7 @@ export default function BeliCabang() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {

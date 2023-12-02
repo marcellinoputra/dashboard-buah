@@ -97,6 +97,7 @@ export default function StockOpnameCabang() {
   const closeModalDelete = () => setIsModalDelete(false);
 
   async function getData() {
+    setStockOpnameCabang([])
     await axios
       .get(`${import.meta.env.VITE_API_URL}/v1/cabang/so-cabang`, {
         headers: {
@@ -104,7 +105,7 @@ export default function StockOpnameCabang() {
         }
       })
       .then((res) => {
-        return setStockOpnameCabang(res.data.data);
+        setStockOpnameCabang(res.data.data);
       })
       .catch((err) => {
         alert(err);
@@ -133,7 +134,7 @@ export default function StockOpnameCabang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {
@@ -151,7 +152,7 @@ export default function StockOpnameCabang() {
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          getData();
         }
       })
       .catch((err) => {
