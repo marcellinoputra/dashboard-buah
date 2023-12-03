@@ -63,15 +63,13 @@ export default function BeliCabang() {
     total_beli: 0,
     createdAt: new Date()
   });
-  const [editData, setEditData] = useState({
-    id: 0,
-    kode_bb: '',
-    nama_bb: '',
-    satuan: '',
-    tanggal_bb: '',
-    total_beli: 0,
-    updatedAt: new Date()
-  });
+
+  const [editKodeBB, setEditKodeBB] = useState("")
+  const [editNamaBB, setEditNamaBB] = useState("")
+  const [editSatuan, setEditSatuan] = useState("")
+  const [editTanggal, setEditTanggal] = useState("")
+  const [editTotal, setEditTotal] = useState(0)
+  const [editId, setEditId] = useState(0)
 
   //Modal Create
   const [isModalCreate, setIsModalCreate] = useState(false);
@@ -86,7 +84,15 @@ export default function BeliCabang() {
 
   const closeModalCreate = () => setIsModalCreate(false);
 
-  const openModalEdit = () => setIsModalEdit(true);
+  const openModalEdit = (id: number, kodebb: string, namabb: string, satuan: string, tanggal: string, total: number) => {
+    setEditId(id)
+    setEditKodeBB(kodebb)
+    setEditNamaBB(namabb)
+    setEditSatuan(satuan)
+    setEditTanggal(tanggal)
+    setEditTotal(total)
+    setIsModalEdit(true)
+  };
 
   const closeModalEdit = () => setIsModalEdit(false);
 
@@ -125,6 +131,33 @@ export default function BeliCabang() {
 
     await axios
       .post(`${import.meta.env.VITE_API_URL}/v1/cabang/beli-cabang`, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalCreate(false);
+          getData();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  async function updateData(id: number) {
+    let formData = new FormData();
+
+    formData.append('kode_bb', editKodeBB);
+    formData.append('nama_bb', editNamaBB);
+    formData.append('satuan', editSatuan);
+    formData.append('tanggal_bb', editTanggal);
+    formData.append('total_beli', editTotal.toString());
+
+    await axios
+      .put(`${import.meta.env.VITE_API_URL}/v1/cabang/beli-cabang/${id}`, formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'ngrok-skip-browser-warning': 'any'
@@ -284,6 +317,118 @@ export default function BeliCabang() {
           </FormControl>
         </Box>
       </Modal>
+
+      {/* Modal Edit */}
+      <Modal
+        open={isModalEdit}
+        onClose={closeModalEdit}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="kode_bb"
+              type="text"
+              defaultValue={editKodeBB}
+              onChange={(e) =>
+                setEditKodeBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="nama_bb"
+              type="text"
+              defaultValue={editNamaBB}
+              onChange={(e) =>
+                setEditNamaBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <FormControl style={textFieldStyle}>
+              <InputLabel id="demo-simple-select-autowidth-label">
+                Satuan
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                onChange={(e) =>
+                  setEditSatuan(e.target.value)
+                }
+                autoWidth
+                label="Satuan"
+                defaultValue={editSatuan}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {satuan.map((satuan) => (
+                  <MenuItem key={satuan.key} value={satuan.value}>
+                    {satuan.render}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              required
+              id="outlined"
+              label="tanggal_bb"
+              type="text"
+              defaultValue={editTanggal}
+              onChange={(e) =>
+                setEditTanggal(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="total_beli"
+              type="number"
+              defaultValue={editTotal}
+              onChange={(e) =>
+                setEditTotal(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <Button
+              onClick={() => updateData(editId)}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit Edit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
@@ -341,6 +486,7 @@ export default function BeliCabang() {
                   <Button
                     onClick={() => {
                       // handleEditData();
+                      openModalEdit(data.id, data.kode_bb, data.nama_bb, data.satuan, data.tanggal_bb, Number(data.total_beli))
                     }}
                   >
                     <Edit />

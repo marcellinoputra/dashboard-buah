@@ -83,7 +83,6 @@ export default function MakananCabang() {
     createdAt: new Date()
   });
   const [editData, setEditData] = useState({
-    id: 0,
     kode_bb: '',
     nama_bb: '',
     satuan: '',
@@ -99,6 +98,21 @@ export default function MakananCabang() {
     input_stock: '',
     updatedAt: new Date()
   });
+
+  const [editKodeBB, setEditKodeBB] = useState("");
+  const [editNamaBB, setEditNamaBB] = useState("");
+  const [editSatuan, setEditSatuan] = useState("");
+  const [editSaldoAwal, setEditSaldoAwal] = useState(0);
+  const [editTPBB, setEditTPBB] = useState("");
+  const [editTotalTerima, setEditTotalTerima] = useState(0);
+  const [editBeli, setEditBeli] = useState(0);
+  const [editBusuk, setEditBusuk] = useState(0);
+  const [editMutasiPlus, setEditMutasiPlus] = useState(0);
+  const [editPakai, setEditPakai] = useState(0);
+  const [editStockOpname, setEditStockOpname] = useState(0);
+  const [editSelisih, setEditSelisih] = useState(0);
+  const [editInputStock, setEditInputStock] = useState("");
+  const [editId, setEditId] = useState(0)
 
   //Modal Create
   const [isModalCreate, setIsModalCreate] = useState(false);
@@ -120,6 +134,25 @@ export default function MakananCabang() {
   const openModalDelete = () => setIsModalDelete(true);
 
   const closeModalDelete = () => setIsModalDelete(false);
+
+
+  const handleOpenEdit = (id: number, kodebb: string, nama_bb: string, satuan: string, saldo_awal: number, tp_bb: string, total_terima: number, beli: number, busuk: number, mutasi_plus: number, pakai: number, stock_opname: number, selisih: number, input_stock: string) => {
+    setEditId(id)
+    setEditKodeBB(kodebb)
+    setEditNamaBB(nama_bb)
+    setEditSatuan(satuan)
+    setEditSaldoAwal(saldo_awal)
+    setEditTPBB(tp_bb)
+    setEditTotalTerima(total_terima)
+    setEditBeli(beli)
+    setEditBusuk(busuk)
+    setEditMutasiPlus(mutasi_plus)
+    setEditPakai(pakai)
+    setEditStockOpname(stock_opname)
+    setEditSelisih(selisih)
+    setEditInputStock(input_stock)
+    setIsModalEdit(false)
+  }
 
   //Get Data
   async function getData() {
@@ -160,6 +193,39 @@ export default function MakananCabang() {
 
     await axios
       .post(`${import.meta.env.VITE_API_URL}/v1/cabang/makanan`, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalCreate(false);
+          getData();
+        }
+      });
+  }
+
+  async function updateData(id: number) {
+
+    let formData = new FormData();
+
+    formData.append('kode_bb', editKodeBB);
+    formData.append('nama_bb', editNamaBB);
+    formData.append('satuan', editSatuan);
+    formData.append('saldo_awal', editSaldoAwal.toString());
+    formData.append('tp_bb', editTPBB);
+    formData.append('total_terima', editTotalTerima.toString());
+    formData.append('beli', editBeli.toString());
+    formData.append('busuk', editBusuk.toString());
+    formData.append('mutasi_plus', editMutasiPlus.toString());
+    formData.append('pakai', editPakai.toString());
+    formData.append('stock_opname', editStockOpname.toString());
+    formData.append('selisih', editSelisih.toString());
+    formData.append('input_stock', editInputStock);
+
+    await axios
+      .put(`${import.meta.env.VITE_API_URL}/v1/cabang/makanan/${id}`, formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'ngrok-skip-browser-warning': 'any'
@@ -420,6 +486,216 @@ export default function MakananCabang() {
           </FormControl>
         </Box>
       </Modal>
+
+      {/* Edit Modal */}
+      <Modal
+        open={isModalEdit}
+        onClose={closeModalEdit}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="Kode BB"
+              type="text"
+              defaultValue={editKodeBB}
+              onChange={(e) =>
+                setEditKodeBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Nama BB"
+              type="text"
+              defaultValue={editNamaBB}
+              onChange={(e) =>
+                setEditNamaBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <FormControl style={textFieldStyle}>
+              <InputLabel id="demo-simple-select-autowidth-label">
+                Satuan
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                onChange={(e) =>
+                  setEditSatuan(e.target.value)
+                }
+                autoWidth
+                label="Satuan"
+                defaultValue={editSatuan}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {satuan.map((satuan) => (
+                  <MenuItem key={satuan.key} value={satuan.value}>
+                    {satuan.render}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              required
+              id="outlined"
+              label="Saldo Awal"
+              type="number"
+
+              defaultValue={editSaldoAwal}
+              onChange={(e) =>
+                setEditSaldoAwal(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Tp BB"
+              type="text"
+
+              defaultValue={editTPBB}
+              onChange={(e) =>
+                setEditTPBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Total Terima"
+              type="number"
+
+              defaultValue={editTotalTerima}
+              onChange={(e) =>
+                setEditTotalTerima(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Beli"
+              type="number"
+
+              defaultValue={editBeli}
+              onChange={(e) =>
+                setEditBeli(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Busuk"
+              type="number"
+
+              defaultValue={editBusuk}
+              onChange={(e) =>
+                setEditBusuk(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Mutasi Plus"
+              type="number"
+
+              defaultValue={editMutasiPlus}
+              onChange={(e) =>
+                setEditMutasiPlus(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Pakai"
+              type="number"
+
+              defaultValue={editPakai}
+              onChange={(e) =>
+                setEditPakai(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Stock Opname"
+              type="number"
+
+              defaultValue={editStockOpname}
+              onChange={(e) =>
+                setEditStockOpname(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="selisih"
+              type="number"
+              defaultValue={editSelisih}
+              onChange={(e) =>
+                setEditSelisih(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Input Stock"
+              type="number"
+              defaultValue={editInputStock}
+              onChange={(e) =>
+                setEditInputStock(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <Button
+              onClick={() => updateData(editId)}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
+
+
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
@@ -495,6 +771,7 @@ export default function MakananCabang() {
                   <Button
                     onClick={() => {
                       // handleEditData();
+                      handleOpenEdit(data.id, data.kode_bb, data.nama_bb, data.satuan, data.saldo_awal, data.tp_bb, data.total_terima, data.beli, data.busuk, data.mutasi_plus, data.pakai, data.stock_opname, data.selisih, data.input_stock)
                     }}
                   >
                     <Edit />

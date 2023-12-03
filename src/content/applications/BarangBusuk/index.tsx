@@ -65,15 +65,33 @@ export default function BarangBusuk() {
     total: 0,
     createdAt: new Date()
   });
-  const [editData, setEditData] = useState({
-    id: 0,
-    kode_bb: '',
-    nama_bb: '',
-    satuan: '',
-    tanggal_bb: '',
-    total: 0,
-    updatedAt: new Date()
-  });
+  // const [editData, setEditData] = useState({
+  //   id: 0,
+  //   kode_bb: '',
+  //   nama_bb: '',
+  //   satuan: '',
+  //   tanggal_bb: '',
+  //   total: 0,
+  //   updatedAt: new Date()
+  // });
+
+  const [editId, setEditId] = useState(0)
+  const [editKodeBB, setEditKodeBb] = useState("")
+  const [editNamaBB, setEditNamaBB] = useState("")
+  const [editSatuan, setEditSatuan] = useState("")
+  const [editTanggal, setEditTanggal] = useState("")
+  const [editTotal, setEditTotal] = useState(0)
+
+  const handleTriggerModalEdit = (id: number, kode_bb: string, nama_bb: string, satuan: string, tanggal_bb: string, total: number) => {
+    setEditId(id)
+    setEditKodeBb(kode_bb)
+    setEditNamaBB(nama_bb)
+    setEditSatuan(satuan)
+    setEditTanggal(tanggal_bb)
+    setEditTotal(total)
+    setIsModalEdit(true)
+
+  }
 
   //Modal Create
   const [isModalCreate, setIsModalCreate] = useState(false);
@@ -88,31 +106,6 @@ export default function BarangBusuk() {
 
   const closeModalCreate = () => setIsModalCreate(false);
 
-  // const openModalEdit = () => setIsModalEdit(true);
-  // function openModalEdit({
-  //   kode_bb,
-  //   nama_bb,
-  //   satuan,
-  //   tanggal_bb,
-  //   total
-  // }: {
-  //   kode_bb: string;
-  //   nama_bb: string;
-  //   satuan: string;
-  //   tanggal_bb: string;
-  //   total: number;
-  // }) {
-  //   const updateData = {
-  //     editKodeBb: kode_bb,
-  //     editNamaBb: nama_bb,
-  //     editSatuan: satuan,
-  //     editTanggalBb: tanggal_bb,
-  //     editTotal: total
-  //   };
-
-  //   setEditData(updateData);
-  //   setIsModalEdit(true);
-  // }
 
   const closeModalEdit = () => setIsModalEdit(false);
 
@@ -146,7 +139,7 @@ export default function BarangBusuk() {
     formData.append('nama_bb', newData.nama_bb);
     formData.append('satuan', newData.satuan);
     formData.append('tanggal_bb', newData.tanggal_bb);
-    formData.append('total', newData.total.toString());
+    formData.append('total_beli', newData.total.toString());
 
     await axios
       .post(
@@ -171,16 +164,15 @@ export default function BarangBusuk() {
   }
 
   //Update Data
-  async function submitEdit({ e, id }: { e: any; id: number }) {
-    e.preventDefault();
+  async function updateData(id: number) {
 
     let formData = new FormData();
 
-    formData.append('kode_bb', newData.kode_bb);
-    formData.append('nama_bb', newData.nama_bb);
-    formData.append('satuan', newData.satuan);
-    formData.append('tanggal_bb', newData.tanggal_bb);
-    formData.append('total', newData.total.toString());
+    formData.append('kode_bb', editKodeBB);
+    formData.append('nama_bb', editNamaBB);
+    formData.append('satuan', editSatuan);
+    formData.append('tanggal_bb', editTanggal);
+    formData.append('total_beli', editTotal.toString());
 
     axios
       .put(
@@ -372,9 +364,9 @@ export default function BarangBusuk() {
               id="outlined"
               label="Kode BB"
               type="text"
-              value={editData.kode_bb}
+              value={editKodeBB}
               onChange={(e) =>
-                setEditData({ ...editData, kode_bb: e.target.value })
+                setEditKodeBb(e.target.value)
               }
               style={textFieldStyle}
             />
@@ -383,9 +375,9 @@ export default function BarangBusuk() {
               id="outlined"
               label="Nama BB"
               type="text"
-              value={editData.nama_bb}
+              value={editNamaBB}
               onChange={(e) =>
-                setEditData({ ...editData, nama_bb: e.target.value })
+                setEditNamaBB(e.target.value)
               }
               style={textFieldStyle}
             />
@@ -397,11 +389,11 @@ export default function BarangBusuk() {
                 labelId="demo-simple-select-autowidth-label"
                 id="demo-simple-select-autowidth"
                 onChange={(e) =>
-                  setEditData({ ...editData, satuan: e.target.value })
+                  setEditSatuan(e.target.value)
                 }
                 autoWidth
                 label="Satuan"
-                defaultValue=""
+                defaultValue={editSatuan}
               >
                 <MenuItem value="">
                   <em>None</em>
@@ -418,9 +410,9 @@ export default function BarangBusuk() {
               id="outlined"
               label="Tanggal BB"
               type="text"
-              value={editData.tanggal_bb}
+              value={editTanggal}
               onChange={(e) =>
-                setEditData({ ...editData, tanggal_bb: e.target.value })
+                setEditTanggal(e.target.value)
               }
               style={textFieldStyle}
             />
@@ -429,13 +421,32 @@ export default function BarangBusuk() {
               id="outlined"
               label="Total"
               type="number"
-              value={editData.total}
+              value={editTotal}
               onChange={(e) =>
-                setEditData({ ...editData, total: parseInt(e.target.value) })
+                setEditTotal(Number(e.target.value))
               }
               style={textFieldStyle}
             />
+            <Button
+              onClick={() => updateData(editId)}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit Edit
+            </Button>
           </FormControl>
+
         </Box>
       </Modal>
       <Button
@@ -491,12 +502,9 @@ export default function BarangBusuk() {
                 </TableCell>
                 <TableCell align="left">
                   <Button
-                  // onClick={() => {
-                  //   openModalEdit(
-                  //     data.kode_bb,
-                  //     data.nama
-                  //   );
-                  // }}
+                    onClick={() => {
+                      handleTriggerModalEdit(data.id, data.kode_bb, data.nama_bb, data.satuan, data.tanggal_bb, data.total)
+                    }}
                   >
                     <Edit />
                   </Button>

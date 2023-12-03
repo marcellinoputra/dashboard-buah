@@ -429,11 +429,11 @@ export default function BahanBakuCabang() {
                       .format('MMMM Do YYYY, h:mm:ss a')}
                   </TableCell>
                   <TableCell align="left">
-                    <Button
-                      onClick={() => {
-                        handleEditData(data.rm_kode, data.rm_nama, data.rm_satuan, data.id);
-                      }}
-                    >
+                      <Button
+                        onClick={() => {
+                          handleEditData(data.rm_kode, data.rm_nama, data.rm_satuan, data.id);
+                        }}
+                      >
                       <Edit />
                     </Button>
                   </TableCell>
