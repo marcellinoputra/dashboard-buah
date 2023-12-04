@@ -1,3 +1,4 @@
+import { Edit } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -21,7 +22,7 @@ interface DataKodeSupplierCabang {
   id: number;
   kode: string;
   nama: string;
-  kelompok: number;
+  kelompok: string;
   alamat: string;
   notelp: number;
   sp_kota: string;
@@ -62,15 +63,36 @@ export default function KodeSupplierCabang() {
     createdAt: new Date()
   });
   const [editData, setEditData] = useState({
-    id: 0,
     kode: '',
     nama: '',
-    kelompok: 0,
+    kelompok: '',
     alamat: '',
     notelp: 0,
     sp_kota: '',
     updatedAt: new Date()
   });
+
+  const [editKode, setEditKode] = useState("")
+  const [editNama, setEditNama] = useState("")
+  const [editKelompok, setEditKelompok] = useState("")
+  const [editAlamat, setEditAlamat] = useState("")
+  const [editTelp, setEditTelp] = useState(0)
+  const [editSpKota, setEditSpKota] = useState("")
+  const [editId, setEditId] = useState(0)
+
+  const handleOpenModalEdit = (kode: string, nama: string, kelompok: string, alamat: string, notelp: number, sp_kota: string, id: number) => {
+    setEditId(id)
+    setEditKode(kode)
+    setEditNama(nama)
+    setEditKelompok(kelompok)
+    setEditAlamat(alamat)
+    setEditTelp(notelp)
+    setEditSpKota(sp_kota)
+    setEditId(id)
+
+    setIsModalEdit(true)
+  }
+
 
   //Modal Create
   const [isModalCreate, setIsModalCreate] = useState(false);
@@ -125,6 +147,39 @@ export default function KodeSupplierCabang() {
     await axios
       .post(
         `${import.meta.env.VITE_API_URL}/v1/gudang/kode-supplier`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'ngrok-skip-browser-warning': 'any'
+          }
+        }
+      )
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalCreate(false);
+          getData();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  async function updateData(id: number) {
+
+    let formData = new FormData();
+
+    formData.append('kode', editKode);
+    formData.append('nama', editNama);
+    formData.append('kelompok', editKelompok);
+    formData.append('alamat', editAlamat);
+    formData.append('notelp', editTelp.toString());
+    formData.append('sp_kota', editSpKota);
+
+    await axios
+      .put(
+        `${import.meta.env.VITE_API_URL}/v1/gudang/kode-supplier/${id}`,
         formData,
         {
           headers: {
@@ -269,6 +324,100 @@ export default function KodeSupplierCabang() {
           </FormControl>
         </Box>
       </Modal>
+
+      {/* Modal Edit */}
+      <Modal
+        open={isModalEdit}
+        onClose={closeModalEdit}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="Kode"
+              type="text"
+              defaultValue={editKode}
+              onChange={(e) => setEditKode(e.target.value)}
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Nama"
+              type="text"
+              defaultValue={editNama}
+              onChange={(e) => setEditNama(e.target.value)}
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Kelompok"
+              type="number"
+              defaultValue={editKelompok}
+              onChange={(e) =>
+                setEditKelompok(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Alamat"
+              type="text"
+              defaultValue={editAlamat}
+              onChange={(e) => setEditAlamat(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Nomor Telepon"
+              type="number"
+              defaultValue={editTelp}
+              onChange={(e) =>
+                setEditTelp(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <Button
+              onClick={() => updateData(editId)}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
@@ -293,6 +442,7 @@ export default function KodeSupplierCabang() {
               <TableCell align="left">Sp Kota</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Updated At</TableCell>
+              <TableCell align='left'>Edit</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -312,6 +462,12 @@ export default function KodeSupplierCabang() {
                 <TableCell align="left">{data.sp_kota}</TableCell>
                 <TableCell align="left">{data.createdAt}</TableCell>
                 <TableCell align="left">{data.updatedAt}</TableCell>
+                <TableCell align='left'>
+                  <Button onClick={() => handleOpenModalEdit(data.kode, data.nama, data.kelompok, data.alamat, data.notelp, data.sp_kota, data.id)}>
+
+                    <Edit />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
