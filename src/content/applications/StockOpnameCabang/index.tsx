@@ -75,6 +75,22 @@ export default function StockOpnameCabang() {
     updatedAt: new Date()
   });
 
+  const [editKodeBB, setEditKodeBB] = useState("")
+  const [editNamaBB, setEditNamaBB] = useState("")
+  const [editSatuan, setEditSatuan] = useState("")
+  const [editTempatBb, setEditTempatBB] = useState("")
+  const [editTotal, setEditTotal] = useState(0)
+  const [editId, setEditId] = useState(0)
+
+  const handleModalEdit = (kode: string, nama: string, satuan: string, tempat: string, total: number, id: number) => {
+    setEditKodeBB(kode)
+    setEditNamaBB(nama)
+    setEditSatuan(satuan)
+    setEditTempatBB(tempat)
+    setEditTotal(total)
+    setEditId(id)
+  }
+
   //Modal Create
   const [isModalCreate, setIsModalCreate] = useState(false);
 
@@ -134,6 +150,34 @@ export default function StockOpnameCabang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
+          getData();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  async function updateData(id: number) {
+
+    let formData = new FormData();
+
+    formData.append('kode_bb', editKodeBB);
+    formData.append('nama_bb', editNamaBB);
+    formData.append('satuan', editSatuan);
+    formData.append('tempat_bb', editTempatBb);
+    formData.append('total', editTotal.toString());
+
+    await axios
+      .put(`${import.meta.env.VITE_API_URL}/v1/cabang/so-cabang/${id}`, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'ngrok-skip-browser-warning': 'any'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalEdit(false);
           getData();
         }
       })
@@ -281,6 +325,120 @@ export default function StockOpnameCabang() {
           </FormControl>
         </Box>
       </Modal>
+
+      {/* Edit Modal */}
+      <Modal
+        open={isModalEdit}
+        onClose={closeModalEdit}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="Kode BB"
+              type="text"
+              defaultValue={editKodeBB}
+              onChange={(e) =>
+                setEditKodeBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Nama BB"
+              type="text"
+              defaultValue={editNamaBB}
+              onChange={(e) =>
+                setEditNamaBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <FormControl style={textFieldStyle}>
+              <InputLabel id="demo-simple-select-autowidth-label">
+                Satuan
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                onChange={(e) =>
+                  setEditSatuan(e.target.value)
+                }
+                autoWidth
+                label="Satuan"
+                defaultValue={editSatuan}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {satuan.map((satuan) => (
+                  <MenuItem key={satuan.key} value={satuan.value}>
+                    {satuan.render}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              required
+              id="outlined"
+              label="Tempat BB"
+              type="text"
+              defaultValue={editTempatBb}
+              onChange={(e) =>
+                setEditTempatBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Total"
+              type="number"
+              defaultValue={editTotal}
+              onChange={(e) =>
+                setEditTotal(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <Button
+              onClick={() => updateData(editId)}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
+
+
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}

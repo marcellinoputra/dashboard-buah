@@ -70,7 +70,6 @@ export default function MutasiCabang() {
     createdAt: new Date()
   });
   const [editData, setEditData] = useState({
-    id: 0,
     kode_bb: '',
     nama_bb: '',
     satuan: '',
@@ -80,6 +79,28 @@ export default function MutasiCabang() {
     keterangan: '',
     updatedAt: new Date()
   });
+
+  const [editKodeBB, setEditKodeBB] = useState("")
+  const [editNamaBB, setEditNamaBB] = useState("")
+  const [editSatuan, setEditSatuan] = useState("")
+  const [editTanggal, setEditTanggal] = useState("")
+  const [editMutasiTerima, setEditMutasiTerima] = useState(0)
+  const [editMutasiKirim, setEditMutasiKirim] = useState(0)
+  const [editKet, setEditKet] = useState("")
+  const [editId, setEditId] = useState(0)
+
+  const handleModalEdit = (kode: string, nama: string, satuan: string, tanggal: string, mutasiterima: number, mutasikirim: number, ket: string, id: number) => {
+    setEditKodeBB(kode)
+    setEditNamaBB(nama)
+    setEditSatuan(satuan)
+    setEditTanggal(tanggal)
+    setEditMutasiTerima(mutasiterima)
+    setEditMutasiKirim(mutasikirim)
+    setEditKet(ket)
+    setEditId(id)
+    setIsModalEdit(true)
+
+  }
 
   //Modal Create
   const [isModalCreate, setIsModalCreate] = useState(false);
@@ -145,6 +166,40 @@ export default function MutasiCabang() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsModalCreate(false);
+          getData();
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+  async function updateData(id: number) {
+
+
+    let formData = new FormData();
+
+    formData.append('kode_bb', editKodeBB);
+    formData.append('nama_bb', editNamaBB);
+    formData.append('satuan', editSatuan);
+    formData.append('tanggal_mutasi', editTanggal);
+    formData.append('mutasi_terima', editMutasiTerima.toString());
+    formData.append('mutasi_kirim', editMutasiKirim.toString());
+    formData.append('keterangan', editKet);
+
+    await axios
+      .put(
+        `${import.meta.env.VITE_API_URL}/v1/cabang/mutasi-cabang/${id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'ngrok-skip-browser-warning': 'any'
+          }
+        }
+      )
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsModalEdit(false);
           getData();
         }
       })
@@ -323,6 +378,141 @@ export default function MutasiCabang() {
           </FormControl>
         </Box>
       </Modal>
+      {/* Modal Edit */}
+      <Modal
+        open={isModalEdit}
+        onClose={closeModalEdit}
+        sx={{
+          height: 500,
+          overflowY: 'scroll',
+          marginTop: 10
+        }}
+      >
+        <Box sx={boxStyle}>
+          <Typography
+            style={{
+              textAlign: 'center',
+              marginBottom: '30'
+            }}
+            variant="h6"
+            component="h2"
+          >
+            Masukan Data Product
+          </Typography>
+          <FormControl sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              required
+              id="outlined"
+              label="Kode BB"
+              type="text"
+              defaultValue={editKodeBB}
+              onChange={(e) =>
+                setEditKodeBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="nama_bb"
+              type="text"
+              defaultValue={editNamaBB}
+              onChange={(e) =>
+                setEditNamaBB(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <FormControl style={textFieldStyle}>
+              <InputLabel id="demo-simple-select-autowidth-label">
+                Satuan
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                onChange={(e) =>
+                  setEditSatuan(e.target.value)
+                }
+                autoWidth
+                label="Satuan"
+                defaultValue={editSatuan}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {satuan.map((satuan) => (
+                  <MenuItem key={satuan.key} value={satuan.value}>
+                    {satuan.render}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              required
+              id="outlined"
+              label="Tanggal Mutasi"
+              type="text"
+              defaultValue={editTanggal}
+              onChange={(e) =>
+                setEditTanggal(e.target.value)
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Mutasi Kirim"
+              type="number"
+              defaultValue={editMutasiKirim}
+              onChange={(e) =>
+                setEditMutasiKirim(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Mutasi Terima"
+              type="number"
+              defaultValue={editMutasiTerima}
+              onChange={(e) =>
+                setEditMutasiTerima(Number(e.target.value))
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Keterangan"
+              type="text"
+              defaultValue={editKet}
+              onChange={(e) =>
+                setEditKet(e.target.value)
+
+              }
+              style={textFieldStyle}
+            />
+
+            <Button
+              onClick={() => updateData(editId)}
+              type="submit"
+              sx={{
+                height: 45,
+                backgroundColor: 'blue',
+                color: 'white',
+                fontWeight: 'bold',
+                borderColor: 'transparent',
+                borderRadius: 20,
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: 'darkblue'
+                }
+              }}
+            >
+              Submit Edit
+            </Button>
+          </FormControl>
+        </Box>
+      </Modal>
       <Button
         variant="contained"
         sx={{ float: 'right', marginRight: 3, marginBottom: 3 }}
@@ -381,6 +571,7 @@ export default function MutasiCabang() {
                 <TableCell align="left">
                   <Button
                     onClick={() => {
+                      handleModalEdit(data.kode_bb, data.nama_bb, data.satuan, data.tanggal_mutasi, data.mutasi_terima, data.mutasi_kirim, data.keterangan, data.id)
                       // handleEditData();
                     }}
                   >
