@@ -158,7 +158,7 @@ export default function MutasiCabang() {
         formData,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'ngrok-skip-browser-warning': 'any'
           }
         }

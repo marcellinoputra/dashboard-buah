@@ -146,7 +146,7 @@ function HeaderUserbox() {
         <Divider />
         <Box sx={{ m: 1 }}>
           <Button color="primary" fullWidth onClick={() => {
-            navigate("/", { replace: true })
+            navigate("/sign-in", { replace: true })
             localStorage.removeItem("data")
           }}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />

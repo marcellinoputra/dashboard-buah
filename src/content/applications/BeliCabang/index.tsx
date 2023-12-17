@@ -132,7 +132,7 @@ export default function BeliCabang() {
     await axios
       .post(`${import.meta.env.VITE_API_URL}/v1/cabang/beli-cabang`, formData, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'any'
         }
       })
@@ -450,8 +450,9 @@ export default function BeliCabang() {
               <TableCell align="left">Satuan</TableCell>
               <TableCell align="left">Tanggal BB</TableCell>
               <TableCell align="left">Total Beli</TableCell>
-              <TableCell align="left">Created At</TableCell>
-              <TableCell align="left">Updated At</TableCell>
+              <TableCell
+                align="left">Created At</TableCell>
+
               <TableCell align="left">Edit</TableCell>
               <TableCell align="left">Delete</TableCell>
             </TableRow>
@@ -470,18 +471,12 @@ export default function BeliCabang() {
                 <TableCell align="left">{data.satuan}</TableCell>
                 <TableCell align="left">{data.tanggal_bb}</TableCell>
                 <TableCell align="left">{data.total_beli}</TableCell>
-                <TableCell align="left">{data.createdAt}</TableCell>
-                <TableCell align="left">{data.updatedAt}</TableCell>
                 <TableCell align="left">
                   {moment(data.createdAt)
                     .utc()
                     .format('MMMM Do YYYY, h:mm:ss a')}
                 </TableCell>
-                <TableCell align="left">
-                  {moment(data.updatedAt)
-                    .utc()
-                    .format('MMMM Do YYYY, h:mm:ss a')}
-                </TableCell>
+
                 <TableCell align="left">
                   <Button
                     onClick={() => {

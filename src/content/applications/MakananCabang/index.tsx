@@ -76,6 +76,7 @@ export default function MakananCabang() {
     beli: 0,
     busuk: 0,
     mutasi_plus: 0,
+    mutasi_minus: 0,
     pakai: 0,
     stock_opname: 0,
     selisih: 0,
@@ -186,6 +187,8 @@ export default function MakananCabang() {
     formData.append('beli', newData.beli.toString());
     formData.append('busuk', newData.busuk.toString());
     formData.append('mutasi_plus', newData.mutasi_plus.toString());
+    formData.append('mutasi_minus', newData.mutasi_plus.toString());
+
     formData.append('pakai', newData.pakai.toString());
     formData.append('stock_opname', newData.stock_opname.toString());
     formData.append('selisih', newData.selisih.toString());
@@ -194,7 +197,7 @@ export default function MakananCabang() {
     await axios
       .post(`${import.meta.env.VITE_API_URL}/v1/cabang/makanan`, formData, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'any'
         }
       })
@@ -227,7 +230,7 @@ export default function MakananCabang() {
     await axios
       .put(`${import.meta.env.VITE_API_URL}/v1/cabang/makanan/${id}`, formData, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'any'
         }
       })
@@ -409,6 +412,19 @@ export default function MakananCabang() {
                 setNewData({
                   ...newData,
                   mutasi_plus: parseInt(e.target.value)
+                })
+              }
+              style={textFieldStyle}
+            />
+            <TextField
+              required
+              id="outlined"
+              label="Mutasi Minus"
+              type="number"
+              onChange={(e) =>
+                setNewData({
+                  ...newData,
+                  mutasi_minus: parseInt(e.target.value)
                 })
               }
               style={textFieldStyle}
