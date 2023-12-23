@@ -19,9 +19,10 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { CSVLink } from 'react-csv';
 import { satuan } from 'src/vendor/satuan';
+
 
 interface DataMakananCabang {
   id: number;
@@ -63,6 +64,8 @@ const textFieldStyle = {
 };
 
 export default function MakananCabang() {
+  const tableRef = useRef(null);
+
   const [dataMakananCabang, setDataMakananCabang] = useState<
     DataMakananCabang[]
   >([]);
@@ -266,6 +269,7 @@ export default function MakananCabang() {
 
   return (
     <>
+
       <Typography
         variant="h1"
         sx={{ marginTop: 5, paddingLeft: 5, paddingBottom: 5 }}

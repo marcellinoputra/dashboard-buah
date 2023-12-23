@@ -147,9 +147,9 @@ const SubMenuWrapper = styled(Box)(
                 background: ${theme.colors.alpha.trueWhite[100]};
                 opacity: 0;
                 transition: ${theme.transitions.create([
-                  'transform',
-                  'opacity'
-                ])};
+    'transform',
+    'opacity'
+  ])};
                 width: 6px;
                 height: 6px;
                 transform: scale(0);
@@ -176,6 +176,7 @@ const SubMenuWrapper = styled(Box)(
 
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
+  const role = localStorage.getItem("role_user")
 
   return (
     <>
@@ -207,105 +208,110 @@ function SidebarMenu() {
         >
           <SubMenuWrapper>
             <List component="div">
-              <ListItem component="div">
+              {Number(role) === 1 ? <> <ListItem component="div">
                 <Button
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
                   to="/dashboards/bahanbakucabang"
-                  // startIcon={<TableChartTwoToneIcon />}
+                // startIcon={<TableChartTwoToneIcon />}
                 >
                   Bahan Baku Cabang
                 </Button>
               </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/barangbusuk"
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/dashboards/barangbusuk"
                   // startIcon={<TableChartTwoToneIcon />}
-                >
-                  Barang Busuk
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/belicabang"
+                  >
+                    Barang Busuk
+                  </Button>
+                </ListItem>
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/dashboards/belicabang"
                   // startIcon={<TableChartTwoToneIcon />}
-                >
-                  Beli Cabang
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/makanancabang"
+                  >
+                    Beli Cabang
+                  </Button>
+                </ListItem>
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/dashboards/makanancabang"
                   // startIcon={<TableChartTwoToneIcon />}
-                >
-                  Makanan Cabang
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/mutasicabang"
+                  >
+                    Makanan Cabang
+                  </Button>
+                </ListItem>
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/dashboards/mutasicabang"
                   // startIcon={<TableChartTwoToneIcon />}
-                >
-                  Mutasi Cabang
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/stockopnamecabang"
+                  >
+                    Mutasi Cabang
+                  </Button>
+                </ListItem>
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/dashboards/stockopnamecabang"
                   // startIcon={<TableChartTwoToneIcon />}
-                >
-                  Stock Opname Cabang
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/bahanbakugudang"
+                  >
+                    Stock Opname Cabang
+                  </Button>
+                </ListItem>
+
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/dashboards/kodesuppliercabang"
                   // startIcon={<TableChartTwoToneIcon />}
-                >
-                  Bahan Baku Gudang
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/datakirimgudang"
+                  >
+                    Kode Supplier Cabang
+                  </Button>
+                </ListItem></> : <>  <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/dashboards/bahanbakugudang"
                   // startIcon={<TableChartTwoToneIcon />}
-                >
-                  Data Kirim Gudang
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/kodesuppliercabang"
+                  >
+                    Bahan Baku Gudang
+                  </Button>
+                </ListItem>
+
+
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/dashboards/datakirimgudang"
                   // startIcon={<TableChartTwoToneIcon />}
-                >
-                  Kode Supplier Cabang
-                </Button>
-              </ListItem>
+                  >
+                    Data Kirim Gudang
+                  </Button>
+                </ListItem></>}
+
+              {/*  */}
+
             </List>
           </SubMenuWrapper>
         </List>

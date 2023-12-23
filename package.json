@@ -34,6 +34,7 @@
     "react-csv": "^2.2.2",
     "react-custom-scrollbars-2": "4.4.0",
     "react-dom": "17.0.2",
+    "react-export-table-to-excel": "github:homefundIndonesia/react-excel",
     "react-helmet-async": "1.3.0",
     "react-router": "6.3.0",
     "react-router-dom": "6.3.0",
